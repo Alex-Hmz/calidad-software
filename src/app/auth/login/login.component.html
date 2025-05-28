@@ -1,0 +1,76 @@
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card login-card p-4 shadow-lg">
+          
+          <h2 class="text-center fw-bold mb-3">Bienvenido</h2>
+          <p class="text-center text-muted mb-4">Ingresa tus credenciales para acceder</p>
+          
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Email input -->
+            <div class="p-field mb-4">
+              <label for="email" class="d-block mb-2 fw-medium"><i class="pi pi-envelope"></i> Correo electrónico</label>
+              <span class="p-input-icon-left w-100">
+                <input 
+                  id="email" 
+                  type="email" 
+                  pInputText 
+                  formControlName="email" 
+                  placeholder="ejemplo@correo.com"
+                  class="w-100 p-inputtext-md">
+              </span>
+              <small 
+                *ngIf="form.get('email')?.invalid && form.get('email')?.touched" 
+                class="p-error mt-1 d-block" style="color: red;">
+                Ingresa un correo electrónico válido
+              </small>
+            </div>
+            
+            <!-- Password input -->
+            <div class="p-field mb-4">
+              <label for="password" class="d-block mb-2 fw-medium"><i class="pi pi-lock"></i> Contraseña</label>
+              <span class="p-input-icon-left w-100">
+                <input 
+                  id="password" 
+                  type="password" 
+                  pInputText 
+                  formControlName="password" 
+                  placeholder="Tu contraseña"
+                  class="w-100 p-inputtext-md">
+              </span>
+              <small 
+                *ngIf="form.get('password')?.invalid && form.get('password')?.touched" 
+                class="p-error mt-1 d-block" style="color: red;">
+                La contraseña es requerida
+              </small>
+            </div>
+            
+            <!-- Login button -->
+            <button 
+              pButton 
+              type="submit" 
+              label="Iniciar sesión" 
+              icon="pi pi-sign-in" 
+              iconPos="right"
+              class="p-button-raised p-button-primary w-100 p-3 mb-3 text-white"
+              [disabled]="form.invalid">
+            </button>
+            
+            <!-- Error message -->
+            <div *ngIf="error" class="alert alert-danger mt-3 text-center">
+              <i class="pi pi-exclamation-triangle me-2"></i>
+              {{ error }}
+            </div>
+            
+            <!-- Register link -->
+            <div class="mt-4 text-center">
+              <span class="text-muted">¿No tienes cuenta?</span>
+              <a (click)="goToRegister()" class="ms-2 cursor-pointer fw-bold text-decoration-none">
+                Regístrate ahora
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>

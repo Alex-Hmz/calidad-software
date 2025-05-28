@@ -1,0 +1,23 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="p-4 shadow rounded bg-light">
+    <h4 class="mb-4">Agendar cita médica</h4>
+  
+    <div class="mb-3">
+      <label for="date" class="form-label">Fecha</label>
+      <input type="date" id="date" formControlName="date" class="form-control">
+    </div>
+  
+    <div class="mb-3">
+      <label for="time" class="form-label">Hora</label>
+      <input type="time" id="time" formControlName="time" class="form-control">
+    </div>
+  
+    <div class="mb-3">
+      <label for="reason" class="form-label">Motivo</label>
+      <textarea id="reason" formControlName="reason" class="form-control" rows="3"></textarea>
+    </div>
+  
+    <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
+      Agendar cita
+    </button>
+</form>
+  

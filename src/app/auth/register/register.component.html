@@ -1,0 +1,214 @@
+<!-- src/app/auth/register.component.html -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+      <div class="card register-card p-4 shadow-lg">
+        
+        <h2 class="text-center fw-bold mb-3">Crear cuenta de paciente</h2>
+        <p class="text-center text-muted mb-4">Completa los datos para registrarte en nuestra agenda médica</p>
+        
+        <form [formGroup]="form" (ngSubmit)="register()">
+          <!-- Datos personales -->
+          <h4 class="mb-3"><i class="pi pi-user"></i> Datos personales</h4>
+          
+          <!-- Nombre -->
+          <div class="p-field mb-4">
+            <label for="name" class="d-block mb-2 fw-medium">Nombre completo</label>
+            <span class="p-input-icon-left w-100">
+              <input 
+                id="name" 
+                type="text" 
+                pInputText 
+                formControlName="name" 
+                placeholder="Tu nombre completo"
+                class="w-100 p-inputtext-md">
+            </span>
+            <small 
+              *ngIf="form.get('name')?.invalid && form.get('name')?.touched" 
+              class="p-error mt-1 d-block">
+              El nombre es requerido
+            </small>
+          </div>
+          
+          <!-- Email -->
+          <div class="p-field mb-4">
+            <label for="email" class="d-block mb-2 fw-medium"><i class="pi pi-envelope"></i> Correo electrónico</label>
+            <span class="p-input-icon-left w-100">
+              <input 
+                id="email" 
+                type="email" 
+                pInputText 
+                formControlName="email" 
+                placeholder="ejemplo@correo.com"
+                class="w-100 p-inputtext-md">
+            </span>
+            <small 
+              *ngIf="form.get('email')?.invalid && form.get('email')?.touched" 
+              class="p-error mt-1 d-block">
+              Ingresa un correo electrónico válido
+            </small>
+          </div>
+
+          <!-- Fecha de nacimiento -->
+          <div class="p-field mb-4">
+            <label for="birthdate" class="d-block mb-2 fw-medium">Fecha de nacimiento</label>
+            <p-datePicker 
+              id="birthdate" 
+              formControlName="birthdate"
+              [showIcon]="true"
+              [maxDate]="today"
+              dateFormat="dd/mm/yy"
+              placeholder="Selecciona tu fecha de nacimiento"
+              styleClass="w-100"
+              [style]="{'width':'100%'}">
+            </p-datePicker>
+            <small 
+              *ngIf="form.get('birthdate')?.invalid && form.get('birthdate')?.touched" 
+              class="p-error mt-1 d-block">
+              La fecha de nacimiento es requerida
+            </small>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="p-field mb-4">
+            <label for="phone" class="d-block mb-2 fw-medium"><i class="pi pi-phone"></i> Número de teléfono</label>
+            <span class="p-input-icon-left w-100">
+              <input 
+                id="phone" 
+                type="tel" 
+                pInputText 
+                formControlName="phone" 
+                placeholder="Tu número de teléfono"
+                class="w-100 p-inputtext-md">
+            </span>
+            <small 
+              *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched" 
+              class="p-error mt-1 d-block">
+              El número de teléfono es requerido
+            </small>
+          </div>
+
+          <!-- Dirección -->
+          <div class="p-field mb-4">
+            <label for="address" class="d-block mb-2 fw-medium"><i class="pi pi-map-marker"></i> Dirección</label>
+            <span class="p-input-icon-left w-100">
+              <input 
+                id="address" 
+                type="text" 
+                pInputText 
+                formControlName="address" 
+                placeholder="Tu dirección completa"
+                class="w-100 p-inputtext-md">
+            </span>
+            <small 
+              *ngIf="form.get('address')?.invalid && form.get('address')?.touched" 
+              class="p-error mt-1 d-block">
+              La dirección es requerida
+            </small>
+          </div>
+
+          <!-- Información médica -->
+          <h4 class="mt-4 mb-3"><i class="pi pi-heart"></i> Información médica</h4>
+
+          <!-- Condiciones médicas -->
+          <div class="p-field mb-4">
+            <label for="medicalConditions" class="d-block mb-2 fw-medium">Condiciones médicas preexistentes (opcional)</label>
+            <textarea 
+              id="medicalConditions" 
+              pInputTextarea 
+              formControlName="medicalConditions" 
+              placeholder="Describe cualquier condición médica relevante"
+              class="w-100 p-inputtext-md"
+              rows="3">
+            </textarea>
+          </div>
+          
+          <!-- Credenciales de acceso -->
+          <h4 class="mt-4 mb-3"><i class="pi pi-lock"></i> Credenciales de acceso</h4>
+
+          <!-- Password -->
+          <div class="p-field mb-4">
+            <label for="password" class="d-block mb-2 fw-medium"><i class="pi pi-lock"></i> Contraseña</label>
+            <span class="p-input-icon-left w-100">
+              <input 
+                id="password" 
+                type="password" 
+                pInputText 
+                formControlName="password" 
+                placeholder="Tu contraseña"
+                class="w-100 p-inputtext-md">
+            </span>
+            <small 
+              *ngIf="form.get('password')?.invalid && form.get('password')?.touched" 
+              class="p-error mt-1 d-block">
+              La contraseña debe tener al menos 6 caracteres
+            </small>
+          </div>
+          
+          <!-- Confirm Password -->
+          <div class="p-field mb-4">
+            <label for="confirmPassword" class="d-block mb-2 fw-medium"><i class="pi pi-lock"></i> Confirmar contraseña</label>
+            <span class="p-input-icon-left w-100">
+              <input 
+                id="confirmPassword" 
+                type="password" 
+                pInputText 
+                formControlName="confirmPassword" 
+                placeholder="Confirma tu contraseña"
+                class="w-100 p-inputtext-md">
+            </span>
+            <small 
+              *ngIf="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched" 
+              class="p-error mt-1 d-block">
+              Debes confirmar tu contraseña
+            </small>
+            <small 
+              *ngIf="form.get('confirmPassword')?.valid && form.hasError('passwordMismatch')" 
+              class="p-error mt-1 d-block">
+              Las contraseñas no coinciden
+            </small>
+          </div>
+          
+          <!-- Register button -->
+          <button 
+            pButton 
+            type="submit" 
+            label="Crear cuenta" 
+            icon="pi pi-user-plus" 
+            iconPos="right"
+            class="p-button-raised p-button-primary w-100 p-3 mb-3 text-white"
+            [disabled]="form.invalid || loading">
+          </button>
+          
+          <!-- Loading spinner -->
+          <div *ngIf="loading" class="text-center my-3">
+            <p-progressSpinner 
+              [style]="{width: '40px', height: '40px'}" 
+              styleClass="custom-spinner" 
+              strokeWidth="4">
+            </p-progressSpinner>
+          </div>
+          
+          <!-- Success and Error messages -->
+          <div *ngIf="success" class="alert alert-success mt-3 text-center">
+            <i class="pi pi-check-circle me-2"></i>
+            {{ success }}
+          </div>
+          
+          <div *ngIf="error" class="alert alert-danger mt-3 text-center">
+            <i class="pi pi-exclamation-triangle me-2"></i>
+            {{ error }}
+          </div>
+          
+          <!-- Login link -->
+          <div class="mt-4 text-center">
+            <span class="text-muted">¿Ya tienes una cuenta?</span>
+            <a (click)="goToLogin()" class="ms-2 cursor-pointer fw-bold text-decoration-none">
+              Inicia sesión
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
