@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../data-access/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
   selector: 'app-login',
   standalone: false,
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit, OnDestroy {
   form: FormGroup;

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../data-access/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -112,9 +112,11 @@ export class RegisterComponent implements OnInit {
       });
       
       // Redirige al login después de un tiempo
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 2000);
+      // setTimeout(() => {
+      //   this.router.navigate(['/login']);
+      // }, 2000);
+
+      this.router.navigate(['/appointments']); // Redirige a la página de citas después del registro exitoso
       
     } catch (err: any) {
       this.error = err.message;

@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AppointmentService } from '../shared/services/appointment.service';
+import { AppointmentService } from '../../../shared/services/appointment.service';
 import { Auth } from '@angular/fire/auth';
-import { Appointment } from '../shared/models/appointment';
+import { Appointment } from '../../../shared/models/appointment';
 
 @Component({
-  selector: 'app-appointment',
+  selector: 'app-create-appointment',
   standalone: false,
-  templateUrl: './appointment.component.html',
-  styleUrl: './appointment.component.scss'
+  templateUrl: './create-appointment.component.html',
+  styleUrl: './create-appointment.component.scss'
 })
-export class AppointmentComponent implements OnInit {
-  form: FormGroup;
+export class CreateAppointmentComponent {
+form: FormGroup;
 
   constructor(
     private fb: FormBuilder,

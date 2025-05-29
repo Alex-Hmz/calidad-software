@@ -20,7 +20,7 @@ import {
   Timestamp,
   serverTimestamp
 } from '@angular/fire/firestore';
-import { UserProfile } from '../shared/models/users';
+import { UserProfile } from '../../../shared/models/users';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 
