@@ -239,7 +239,7 @@ export class AuthService {
     try {
       await signOut(this.auth);
       this.clearCredentials();
-      this.router.navigate(['/login'], { replaceUrl: true });
+      this.router.navigate(['/auth/login'], { replaceUrl: true });
       return true;
     } catch (error: any) {
       throw new Error(`Error al cerrar sesión: ${error.message}`);

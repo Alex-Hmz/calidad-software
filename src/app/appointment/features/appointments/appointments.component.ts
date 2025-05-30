@@ -29,7 +29,7 @@ export class AppointmentsComponent {
       this.historialCitas = historico;
     } else {
       // Si no hay usuario, redirige al login o muestra mensaje
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
     }
   }
 

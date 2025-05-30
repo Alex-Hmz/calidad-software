@@ -10,7 +10,8 @@ export default [
         loadChildren: () => import('./features/create-appointment/create-appointment.module').then(m => m.CreateAppointmentModule)
     },
     {
-        path: '**',
-        redirectTo: 'list'
+        path: '',
+        redirectTo: 'list',
+        pathMatch: 'full'
     }
 ] as Routes

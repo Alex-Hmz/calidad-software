@@ -112,11 +112,11 @@ export class RegisterComponent implements OnInit {
       });
       
       // Redirige al login después de un tiempo
-      // setTimeout(() => {
-      //   this.router.navigate(['/login']);
-      // }, 2000);
+      setTimeout(() => {
+        this.router.navigate(['/auth/login']);
+      }, 2000);
 
-      this.router.navigate(['/appointments']); // Redirige a la página de citas después del registro exitoso
+      // this.router.navigate(['/appointments']); // Redirige a la página de citas después del registro exitoso
       
     } catch (err: any) {
       this.error = err.message;
@@ -131,6 +131,6 @@ export class RegisterComponent implements OnInit {
   }
 
   goToLogin(): void {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 }

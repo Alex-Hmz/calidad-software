@@ -27,7 +27,6 @@ import { getFunctions, provideFunctions } from '@angular/fire/functions';
     
     HeaderComponent, 
     FooterComponent, 
-    HomeComponent, 
   
   ],
   imports: [

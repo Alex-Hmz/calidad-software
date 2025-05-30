@@ -23,14 +23,14 @@ export class HomeComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const user = this.auth.currentUser;
 
-    if (user) {
-      const { actuales, historico } = await this.appointmentService.getAppointmentsByUser(user.uid);
-      this.citasActuales = actuales;
-      this.historialCitas = historico;
-    } else {
-      // Si no hay usuario, redirige al login o muestra mensaje
-      this.router.navigate(['/login']);
-    }
+    // if (user) {
+    //   const { actuales, historico } = await this.appointmentService.getAppointmentsByUser(user.uid);
+    //   this.citasActuales = actuales;
+    //   this.historialCitas = historico;
+    // } else {
+    //   // Si no hay usuario, redirige al login o muestra mensaje
+    //   this.router.navigate(['/auth/login']);
+    // }
   }
 
   agendarCita() {

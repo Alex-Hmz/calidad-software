@@ -13,6 +13,12 @@ import { HomeComponent } from './home/home.component';
 // ];
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./auth/auth.routes').then(m => m.default),
     canActivate: [], // Aquí puedes agregar un guard si es necesario
@@ -24,9 +30,10 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent,
+    loadChildren: () => import('./home/home.routes').then(m => m.default),
     canActivate: [], // Aquí puedes agregar un guard si es necesario
-  }
+  },
+
 ];
 
 @NgModule({

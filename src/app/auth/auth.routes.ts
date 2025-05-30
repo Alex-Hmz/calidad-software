@@ -10,7 +10,8 @@ export default [
         loadChildren: () => import('./features/register/register.module').then(m => m.RegisterModule)
     },
     {
-        path: '**',
-        redirectTo: 'login'
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
     }
 ] as Routes

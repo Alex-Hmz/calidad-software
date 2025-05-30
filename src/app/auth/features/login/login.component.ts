@@ -32,10 +32,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     // Revisar el estado de autenticación SOLO UNA VEZ al inicializar
-    const currentUser = this.authService.getCurrentUser();
-    if (currentUser) {
-      this.router.navigate(['/home']);
-    }
+    // const currentUser = this.authService.getCurrentUser();
+    // if (currentUser) {
+    //   this.router.navigate(['/home']);
+    // }
   }
 
   ngOnInit(): void {
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    * Navega a la página de registro
    */
   goToRegister() {
-    this.router.navigate(['/register']);
+    this.router.navigate(['/auth/register']);
   }
   
   /**
