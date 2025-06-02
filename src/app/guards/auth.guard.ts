@@ -7,11 +7,11 @@ import { map, take } from 'rxjs/operators';
  * Guard de autenticación que verifica si el usuario está autenticado
  * y opcionalmente comprueba si tiene los roles requeridos para acceder a una ruta.
  */
- export const authGuard: CanActivateFn = (route, state) => {
+ export const privateGuard: CanActivateFn = (route, state) => {
    const authService = inject(AuthService);
    const router = inject(Router);
 
-   return authService.isLoggedIn$.pipe(
+   return authService.authState$.pipe(
      take(1),
      map(isLoggedIn => {
        const user = authService.getCurrentUser();  //Ya se debió haber establecido por onAuthStateChanged
@@ -20,13 +20,43 @@ import { map, take } from 'rxjs/operators';
          if (!requiredRoles || requiredRoles.includes(user.role || '')) {
            return true;
          } else {
-           router.navigate(['/access-denied']);
+        //    router.navigate(['/access-denied']);
+           router.navigate(['/auth/login']);
            return false;
          }
        }
-
-       router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+       
+       router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
        return false;
+     })
+   );
+ };
+
+  /**
+  * Guard que verifica si el usuario NO está autenticado.
+  * Útil para rutas como login/registro que solo deben ser accesibles para usuarios no autenticados.
+  */
+ export const publicGuard: CanActivateFn = (route, state) => {
+   const authService = inject(AuthService);
+   const router = inject(Router);
+  
+    //Verificamos primero directamente sin usar el observable
+   const currentUser = authService.getCurrentUser();
+  
+   if (currentUser) {
+    router.navigate(['appointment/list']);
+    return false;
+   }
+  
+    //Si no estamos seguros, usamos el observable
+   return authService.isLoggedIn$.pipe(
+     take(1),
+     map(isLoggedIn => {
+       if (isLoggedIn) {
+            router.navigate(['appointment/list']);
+         return false;
+       }
+       return true;
      })
    );
  };
@@ -76,31 +106,4 @@ import { map, take } from 'rxjs/operators';
    };
  }
 
- /**
-  * Guard que verifica si el usuario NO está autenticado.
-  * Útil para rutas como login/registro que solo deben ser accesibles para usuarios no autenticados.
-  */
- export const notAuthGuard: CanActivateFn = (route, state) => {
-   const authService = inject(AuthService);
-   const router = inject(Router);
-  
-    //Verificamos primero directamente sin usar el observable
-   const currentUser = authService.getCurrentUser();
-  
-   if (currentUser) {
-     router.navigate(['/home']);
-     return false;
-   }
-  
-    //Si no estamos seguros, usamos el observable
-   return authService.isLoggedIn$.pipe(
-     take(1),
-     map(isLoggedIn => {
-       if (isLoggedIn) {
-         router.navigate(['/home']);
-         return false;
-       }
-       return true;
-     })
-   );
- };
+

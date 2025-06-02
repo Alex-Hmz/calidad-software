@@ -20,25 +20,20 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
+import { HeaderModule } from './shared/components/header/header.module';
+import { FooterModule } from './shared/components/footer/footer.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    
-    HeaderComponent, 
-    FooterComponent, 
-  
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    // ReactiveFormsModule,
-    // InputTextModule,
-    // ButtonModule,
-    // ProgressSpinnerModule,
-    // DatePickerModule,
-    // CheckboxModule
+    HeaderModule, 
+    FooterModule
+
   ],
   providers: [
       provideFirebaseApp(() => initializeApp({ 

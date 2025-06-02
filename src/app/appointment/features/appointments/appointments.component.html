@@ -11,7 +11,36 @@
       <div class="card-header bg-primary text-white">
         <h5 class="mb-0">Citas actuales</h5>
       </div>
-      <div class="card-body" *ngIf="citasActuales.length > 0; else noCitas">
+      <div class="card-body" *ngIf="appointmentService.current_appointments().length > 0; else noCitas">
+          @if(appointmentService.loading()){
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                      Loading...
+                  </td>
+              </tr>
+        }
+        
+        @if(!appointmentService.loading() && !appointmentService.error()){
+          <p-dataview [value]="appointmentService.current_appointments()">
+              <ng-template let-items #list>
+                <div class="row">
+                  <div class="col-12 mb-3" *ngFor="let cita of items">
+                    <div class="d-flex justify-content-around align-items-center p-3 border rounded shadow-sm">
+                      <div><strong>Fecha:</strong> {{ cita.date }}</div>
+                      <div><strong>Hora:</strong> {{ cita.time }}</div>
+                      <div><strong>Motivo:</strong> {{ cita.reason }}</div>
+                      <p-tag [value]="cita.estado" severity="info"></p-tag>
+                      <div><p-button icon="pi pi-trash" aria-label="Delete" (onClick)="delete(cita.id)"/></div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+          </p-dataview>
+        }
+
+
+      </div>
+      <!-- <div class="card-body" *ngIf="citasActuales.length > 0; else noCitas">
         <ul class="list-group">
           <li class="list-group-item" *ngFor="let cita of citasActuales">
             <div class="d-flex justify-content-between align-items-center">
@@ -24,9 +53,11 @@
             </div>
           </li>
         </ul>
-      </div>
+      </div> -->
       <ng-template #noCitas>
-        <p class="text-muted">No tienes citas próximas.</p>
+        <div class="card-body">
+          <p class="text-muted">No tienes citas próximas.</p>
+        </div>
       </ng-template>
     </div>
   
@@ -35,8 +66,8 @@
       <div class="card-header bg-secondary text-white">
         <h5 class="mb-0">Historial de citas</h5>
       </div>
-      <div class="card-body" *ngIf="historialCitas.length > 0; else noHistorial">
-        <ul class="list-group">
+      <div class="card-body" *ngIf="appointmentService.historic_appointments().length > 0; else noHistorial">
+          <!-- <ul class="list-group">
           <li class="list-group-item" *ngFor="let cita of historialCitas">
             <div>
               <strong>Fecha:</strong> {{ cita.date }}<br>
@@ -44,11 +75,35 @@
               <strong>Motivo:</strong> {{ cita.reason }}
             </div>
           </li>
-        </ul>
+        </ul> -->
+          <p-dataview [value]="appointmentService.historic_appointments()">
+            <ng-template let-items #list>
+              <div class="row">
+                <div class="col-12 mb-3" *ngFor="let cita of items">
+                  <div class="d-flex justify-content-between align-items-center p-3 border rounded shadow-sm">
+                <div>
+                  <div><strong>Fecha:</strong> {{ cita.date }}</div>
+                  <div><strong>Hora:</strong> {{ cita.time }}</div>
+                  <div><strong>Motivo:</strong> {{ cita.reason }}</div>
+                </div>
+                    <p-tag 
+                      [value]="cita.estado" 
+                      [severity]="
+                        cita.estado === 'Pendiente' ? 'warning' : 
+                        cita.estado === 'Cancelado' ? 'danger' : 
+                        cita.estado === 'No asistió' ? 'secondary' : 
+                        'info'
+                    "></p-tag>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+        </p-dataview>
       </div>
       <ng-template #noHistorial>
-        <p class="text-muted">Aún no hay citas previas registradas.</p>
+        <div class="card-body">
+          <p class="text-muted">Aún no hay citas previas registradas.</p>
+        </div>
       </ng-template>
     </div>
   </div>
-  

@@ -1,23 +1,82 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="p-4 shadow rounded bg-light">
-    <h4 class="mb-4">Agendar cita médica</h4>
-  
-    <div class="mb-3">
-      <label for="date" class="form-label">Fecha</label>
-      <input type="date" id="date" formControlName="date" class="form-control">
+<!-- <div class="contenedor d-flex justify-content-center align-items-center vh-100"> -->
+
+<div class="component-container d-flex justify-content-center align-items-center">
+
+  <div class="component-card card p-4 shadow">
+    <div class="d-flex  mb-3 justify-content-between align-items-center">
+      <button type="button" class="btn btn-primary w-20" (click)="goBack()">
+          Volver a citas
+      </button>
     </div>
-  
-    <div class="mb-3">
-      <label for="time" class="form-label">Hora</label>
-      <input type="time" id="time" formControlName="time" class="form-control">
-    </div>
-  
-    <div class="mb-3">
-      <label for="reason" class="form-label">Motivo</label>
-      <textarea id="reason" formControlName="reason" class="form-control" rows="3"></textarea>
-    </div>
-  
-    <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
-      Agendar cita
-    </button>
-</form>
-  
+    
+    <!-- <form [formGroup]="form" (ngSubmit)="submit()" class="p-4 shadow rounded bg-light">
+      <h4 class="mb-4">Agendar cita médica</h4>
+    
+      <div class="mb-3">
+        <label for="date" class="form-label">Fecha</label>
+        <input type="date" id="date" formControlName="date" class="form-control">
+      </div>
+    
+      <div class="mb-3">
+        <label for="time" class="form-label">Hora</label>
+        <input type="time" id="time" formControlName="time" class="form-control">
+        <p-datepicker id="time" inputId="calendar-timeonly" formControlName="time" [timeOnly]="true" class="form-control" />
+
+      </div>
+    
+      <div class="mb-3">
+        <label for="reason" class="form-label">Motivo</label>
+        <textarea id="reason" formControlName="reason" class="form-control" rows="3"></textarea>
+      </div>
+    
+      <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
+        Agendar cita
+      </button>
+    </form> -->
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="p-4 rounded bg-white shadow card" style="max-width: 400px; margin: auto;">
+      <h3 class="mb-4 fw-bold text-dark">Agendar cita médica</h3>
+
+      <div class="mb-3">
+        <label for="date" class="form-label fw-semibold">Fecha</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light"><i class="pi pi-calendar"></i></span>
+          <p-datepicker id="date" formControlName="date" dateFormat="yy-mm-dd"  [readonlyInput]="true" [minDate]="minDate" class="form-control-custom"></p-datepicker>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="time" class="form-label fw-semibold">Hora</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light"><i class="pi pi-clock"></i></span>
+          <div >
+            <p-select
+              formControlName="time"
+              [options]="availableTimes"
+              [optionValue]="'value'"
+              placeholder="Selecciona una hora"
+              optionLabel="label"
+              [style.width.%]="100"
+              [panelStyle]="{width: '100%'}"
+              >
+            </p-select>
+          </div>
+
+          <!-- <p-datepicker formControlName="time" [timeOnly]="true" hourFormat="24">
+              <ng-template #date let-date>
+                  <strong *ngIf="date.hour > 0 && date.hour < 9; else elseBlock" style="display: none;"></strong>
+                  <ng-template #elseBlock>{{ date.hour }}</ng-template>
+              </ng-template>
+          </p-datepicker> -->
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="reason" class="form-label fw-semibold">Motivo</label>
+        <textarea id="reason" pTextarea formControlName="reason" rows="3" class="form-control" placeholder="Describe el motivo de la cita" style="resize: none; max-height: 100px;"></textarea>
+      </div>
+
+      <button type="submit" pButton label="Agendar cita" class=" p-button-success fw-bold py-2" [disabled]="form.invalid"></button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,200 @@
+@use "../base/variables" as v;
+@use "../base/mixins" as m;
+
+
+
+// :host ::ng-deep {
+//     /** Estilos Formulario **/
+
+//     p-calendar span > button {
+//         border: 1px solid v.$rojo_oscuro_borde;
+//         background-color: v.$rojo_oscuro !important;
+//         &:hover{
+//             background-color: v.$rojo_claro !important;
+//             border-color: v.$rojo_claro_borde !important;
+//         }
+        
+//     }
+
+//     .p-calendar .p-datepicker{
+//         left: -55px !important;
+//         scale: 0.75 !important;
+//         @include m.desktop {
+//             left: -65px !important;
+//         }
+//       }
+
+      
+//     //   p-selectButton > 
+
+//     .p-toolbar{
+//         padding: 0.75rem;
+//     }
+
+//     .p-toolbar-group-start, .p-toolbar-group-end{
+//         column-gap: 4px;
+//     }
+
+
+//     p-dropdown  input{
+//         margin-right: 0 !important; 
+//     }
+
+//     p-dropdown > div {
+//         width: 220px;
+//         @include m.telefono{
+//             width: 250px;
+//         }
+//     }
+
+//     p-button {
+//         &.btn_sacmex {
+//             button {
+//                 color: v.$blanco;
+//                 background: v.$rojo_oscuro !important;
+//                 border: 1px solid v.$rojo_oscuro_borde !important;
+    
+//                 &:hover {
+//                     background: v.$rojo_claro !important;
+//                     color: v.$blanco;
+//                     border-color: v.$rojo_claro_borde !important;
+//                 }
+//             }
+//         }
+//     }
+
+//     p-fileupload div span{
+//         color: v.$blanco;
+//         background: v.$rojo_oscuro !important;
+//         // border: 1px solid v.$rojo_oscuro_borde !important;
+//         border-color: v.$rojo_oscuro_borde !important;
+
+//         &:hover {
+//             background: v.$rojo_claro !important;
+//             color: v.$blanco;
+//             border-color: v.$rojo_claro_borde !important;
+//         }
+//     }
+    
+
+//     .botones{
+
+
+//         p-button:nth-child(1) {
+//             button{
+//                 background-color: #ffa600 !important;
+//                 border-color: #c07d01 !important;
+
+//                &:hover{
+//                     background: #c07d01 !important; 
+//                     color: v.$blanco !important;
+//                     border-color: #9b6500 !important;
+//                 }
+//             } 
+//         }
+//         p-button:nth-child(2) {
+//             button{
+//                 background-color: #ff0000d8 !important;
+//                 border-color: #b30000 !important;
+
+//                &:hover{
+//                     background: #b30000 !important;
+//                     color: v.$blanco !important;
+//                     border-color: #830202 !important;
+//                 }
+//             }
+            
+//         }
+//     }
+
+
+
+
+//     p-table{
+        
+//         th,
+//         td {
+          
+//           text-align: center !important;
+//           font-size : 15px !important;
+          
+//         }
+
+//         td{
+//             padding   : 0.3rem !important;
+//             max-width: 150px;
+//         }
+
+//         th{
+//             padding   : 1rem !important;
+//         }
+
+
+//         .cabecera-inputs{
+//             #id{
+//                 width: 75px;
+//             }
+
+//             input{
+//                 width: 175px;
+//             }
+//         }
+//     }
+    
+//     p-toast{
+
+//         > div{
+//             width: 100%;
+//             top: 50px;
+//             left: 0;
+//             @include m.telefono{
+//                 top: 50px;
+//                 // width: unset;
+//                 width: 400px;
+
+//                 left: unset;
+//             }
+
+            
+//         }
+//     }
+
+//     p-tabView div:nth-child(2) {
+//         // overflow: auto;
+//     }
+
+//     // p-dialog div div:nth-child(2){
+//     //     width: 80% !important;
+//     // }
+//     // @include m.desktop{
+//     //     p-dialog div div:nth-child(2){
+//     //         width: 50% !important;
+
+//     //     }
+//     //     // width: unset;
+//     // }
+//     // p-dialog div > div{
+//     //     width: 60vw !important;
+//     // }
+//     // @include m.desktop{
+//     //     p-dialog div > div{
+//     //         width: 50vw !important;
+
+//     //     }
+//     //     // width: unset;
+//     // }
+
+//     p-dialog div:first-child div:first-child{
+//         // width: unset !important;
+//     }
+//     p-dialog div div:nth-child(2){
+//         // padding: 0 !important;
+//     }
+//     .p-dialog{
+//         max-height: 80%;
+//     }
+
+//     .p-toast .p-toast-message.custom-toast .p-toast-detail {
+//         white-space: pre-line; /* Permite saltos de línea */
+//       }
+// }

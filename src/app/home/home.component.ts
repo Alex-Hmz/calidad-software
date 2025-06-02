@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppointmentService } from '../shared/services/appointment.service';
+import { AppointmentService } from '../appointment/data-access/appointment.service';
 import { Auth } from '@angular/fire/auth';
-import { Appointment } from '../shared/models/appointment';
+import { Appointment } from '../appointment/models/appointment';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +33,4 @@ export class HomeComponent implements OnInit {
     // }
   }
 
-  agendarCita() {
-    this.router.navigate(['/agendar']); // redirige a formulario de nueva cita
-  }
 }

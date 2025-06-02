@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { privateGuard, publicGuard } from './guards/auth.guard';
 
 // import { AppointmentComponent } from './appointment/features/create-appointment/appointment.component';
 
@@ -21,17 +22,19 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.routes').then(m => m.default),
-    canActivate: [], // Aquí puedes agregar un guard si es necesario
+    data: { roles: ['admin', 'patient'] },
+    canActivate: [publicGuard], 
   },
   {
     path: 'appointment',
     loadChildren: () => import('./appointment/appointment.routes').then(m => m.default),
-    canActivate: [], // Aquí puedes agregar un guard si es necesario
+    data: { roles: ['admin', 'patient'] },
+    canActivate: [privateGuard], 
   },
   {
     path: 'home',
     loadChildren: () => import('./home/home.routes').then(m => m.default),
-    canActivate: [], // Aquí puedes agregar un guard si es necesario
+    canActivate: [publicGuard], 
   },
 
 ];

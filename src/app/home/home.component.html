@@ -1,54 +1,6 @@
 <div class="container py-5">
-    <h2 class="text-center mb-4">Bienvenido a tu Panel de Citas</h2>
+    <h2 class="text-center mb-4">Bienvenido a tu Aplicación de Citas</h2>
   
-    <!-- Botón para agendar nueva cita -->
-    <div class="text-end mb-4">
-      <button pButton label="Agendar nueva cita" icon="pi pi-plus" class="p-button-success" (click)="agendarCita()"></button>
-    </div>
-  
-    <!-- Citas actuales -->
-    <div class="card mb-5 shadow-sm">
-      <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Citas actuales</h5>
-      </div>
-      <div class="card-body" *ngIf="citasActuales.length > 0; else noCitas">
-        <ul class="list-group">
-          <li class="list-group-item" *ngFor="let cita of citasActuales">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <strong>Fecha:</strong> {{ cita.date }}<br>
-                <strong>Hora:</strong> {{ cita.time }}<br>
-                <strong>Motivo:</strong> {{ cita.reason }}
-              </div>
-              <span class="badge bg-info text-dark">{{ cita.estado }}</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <ng-template #noCitas>
-        <p class="text-muted">No tienes citas próximas.</p>
-      </ng-template>
-    </div>
-  
-    <!-- Historial de citas -->
-    <div class="card shadow-sm">
-      <div class="card-header bg-secondary text-white">
-        <h5 class="mb-0">Historial de citas</h5>
-      </div>
-      <div class="card-body" *ngIf="historialCitas.length > 0; else noHistorial">
-        <ul class="list-group">
-          <li class="list-group-item" *ngFor="let cita of historialCitas">
-            <div>
-              <strong>Fecha:</strong> {{ cita.date }}<br>
-              <strong>Hora:</strong> {{ cita.time }}<br>
-              <strong>Motivo:</strong> {{ cita.reason }}
-            </div>
-          </li>
-        </ul>
-      </div>
-      <ng-template #noHistorial>
-        <p class="text-muted">Aún no hay citas previas registradas.</p>
-      </ng-template>
-    </div>
+    
   </div>
   

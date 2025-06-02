@@ -1,3 +1,22 @@
-<header style="background-color: #007ad9; color: white; padding: 1rem;">
-    <h1 style="margin: 0;">Agenda Medica</h1>
-</header>
+
+    <header class="d-flex align-items-center justify-content-between" style="background-color: #007ad9; color: white; padding: 1rem;">
+        <h1 class="mb-0">Agenda Medica</h1>
+        @if(authService.isLoggedIn()){
+            <button 
+                pButton 
+                icon="pi pi-sign-out" 
+                label="Cerrar sesión" 
+                class="p-button-secondary" 
+                (click)="logOut()">
+            </button>
+        }@else {
+            <button 
+                pButton 
+                icon="pi pi-sign-in" 
+                label="Iniciar sesión" 
+                class="p-button-secondary" 
+                (click)="goToLogin()">
+            </button>
+        }
+
+    </header>

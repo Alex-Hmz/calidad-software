@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   loading = false;
   submitted = false;
   rememberMe = false;
-  returnUrl: string = '/home'; // Valor predeterminado
+  returnUrl: string = '/appointment/list'; // Valor predeterminado
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Obtener el returnUrl de los parámetros de la URL o usar la ruta predeterminada
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/appointment/list';
     
     // No hacemos verificación de autenticación aquí para evitar el bucle
   }

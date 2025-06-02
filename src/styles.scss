@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+@use "app/scss/base/index" as base;
+@use "app/scss/layout" as layout;
+@use "app/scss/base/variables" as v;
+@use "app/scss/base/mixins" as m;
+
+$primary: #4a90e2;
+$secondary: #e94e77;
+$success: #50e3c2;
+
+.component-container {
+  min-height: calc(100vh - 152px); // Adjusted for header and footer height
+}
+.component-card{
+    width: 90%;
+}
+@include m.tablet {
+    .component-card {
+        width: 60%;
+        margin: 0 auto;
+    }
+    
+}
+@include m.desktop {
+    .component-card {
+        width: 50%;
+        margin: 0 auto;
+    }
+    
+}

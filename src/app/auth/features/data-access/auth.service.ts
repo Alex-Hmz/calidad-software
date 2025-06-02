@@ -9,7 +9,8 @@ import {
   setPersistence, 
   signInWithEmailAndPassword, 
   signOut, 
-  User 
+  User,
+  authState
 } from '@angular/fire/auth';
 import { 
   doc, 
@@ -251,6 +252,8 @@ export class AuthService {
    */
   isLoggedIn(): boolean {
     return !!this.getStoredCredentials();
+    // return !!this.auth.currentUser;
+
   }
 
   /**
@@ -298,4 +301,9 @@ export class AuthService {
   getCurrentUser(): Credentials | null {
     return this.credentialsSubject.value;
   }
+
+  get authState$(): Observable<User | null> {
+    return authState(this.auth);
+  }
+  
 }
