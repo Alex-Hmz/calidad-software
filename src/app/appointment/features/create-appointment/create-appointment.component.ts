@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppointmentService } from '../../data-access/appointment.service';
 import { Auth } from '@angular/fire/auth';
-import { Appointment, AppointmentType, CreateAppointment } from '../../models/appointment';
+import { Appointment, CreateAppointment } from '../../models/appointment';
 import { Router } from '@angular/router';
+import { AppointmentStatusEnum } from '../../../shared/models/enums';
 
 @Component({
   selector: 'app-create-appointment',
@@ -59,7 +60,7 @@ export class CreateAppointmentComponent {
 
     const appointment: CreateAppointment = {
       userId: this.auth.currentUser.uid,
-      estado: AppointmentType.Pendiente,
+      estado: AppointmentStatusEnum.Pendiente,
       date: formattedDate,
       time,
       reason,
@@ -108,29 +109,6 @@ export class CreateAppointmentComponent {
         });
       }
       
-      // if(currentHour >= 9 && currentHour < 17) {
-      //   base.setHours((currentHour + 1), 0, 0, 0);
-      //   console.log(`En rango laboral: ${currentHour}`);
-      // }
-
-      // if(currentHour >= 17 || currentHour < 9) {
-      //   base.setHours(9, 0, 0, 0);
-      //   console.log(`Terminando el día zzz: ${currentHour}`);
-      // }
-
-      // if(currentHour >= 17) {
-      //   this.minDate = new Date();
-      //   this.minDate.setHours(0, 0, 0, 0);
-      //   this.minDate.setDate(base.getDate() + 1);
-      //   console.log(`Toca para el día siguiente: ${currentHour}`);
-      // }
-
-      // for (let hour = base.getHours(); hour < 18; hour++) {
-      //   this.availableTimes.push({
-      //     label: `${hour.toString().padStart(2, '0')}:00`,
-      //     value: `${hour.toString().padStart(2, '0')}:00`
-      //   });
-      // }
   }
     
   goBack(){

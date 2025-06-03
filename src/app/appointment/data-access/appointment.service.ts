@@ -1,7 +1,8 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { Firestore, collection, addDoc, getDocs, query, where, CollectionReference, updateDoc, doc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
-import { Appointment, AppointmentType, CreateAppointment } from '../models/appointment';
+import { Appointment, CreateAppointment } from '../models/appointment';
+import { AppointmentStatusEnum } from '../../shared/models/enums';
 
 interface AppointmentState{
     current_appointments: Appointment[];
@@ -88,7 +89,7 @@ export class AppointmentService {
     }
   }
 
-  async updateAppointmentStatus(appointmentId: string, appointmentType:AppointmentType): Promise<void> {
+  async updateAppointmentStatus(appointmentId: string, appointmentType:AppointmentStatusEnum): Promise<void> {
     const docRef = doc(this.firestore, 'appointments', appointmentId);
     try {
       alert('Cita modificada exitosamente: ' + appointmentType);

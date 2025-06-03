@@ -1,9 +1,6 @@
+import { AppointmentStatusEnum } from "../../shared/models/enums";
 
-export enum AppointmentType {
-    Confirmada = 'Confirmada',
-    Pendiente = 'Pendiente',
-    Cancelada = 'Cancelada'
-}
+
 
 export interface Appointment {
     id: string;           
@@ -11,7 +8,7 @@ export interface Appointment {
     date: string;
     time: string;
     reason: string;
-    estado: AppointmentType;
+    estado: AppointmentStatusEnum;
     createdAt: number;
 }
 
@@ -20,6 +17,6 @@ export interface CreateAppointment {
     date: string;
     time: string;
     reason: string;
-    estado: AppointmentType;
+    estado: AppointmentStatusEnum;
     createdAt: number;
 }

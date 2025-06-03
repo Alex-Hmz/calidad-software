@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Appointment, AppointmentType } from '../../models/appointment';
+import { Appointment } from '../../models/appointment';
 import { AppointmentService } from '../../data-access/appointment.service';
 import { AuthService } from '../../../auth/features/data-access/auth.service';
+import { AppointmentStatusEnum } from '../../../shared/models/enums';
 
 @Component({
   selector: 'app-appointments',
@@ -49,9 +50,8 @@ export class AppointmentsComponent {
 
   async delete(id:string) {
     // Implementar lógica de eliminación de cita
-    this.appointmentService.updateAppointmentStatus(id, AppointmentType.Cancelada)
+    this.appointmentService.updateAppointmentStatus(id, AppointmentStatusEnum.Cancelada)
     .then(() => {
-      alert('Cita eliminada exitosamente');
       this.getAppointments();
 
       // Actualizar la lista de citas después de eliminar

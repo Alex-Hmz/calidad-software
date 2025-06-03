@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../data-access/auth.service';
+import { UserRoleEnum } from '../../../shared/models/enums';
 
 @Component({
   selector: 'app-register',
@@ -100,7 +101,7 @@ export class RegisterComponent implements OnInit {
         phone,
         address,
         medicalConditions,
-        role: 'patient', // Asignamos el rol de paciente
+        role: UserRoleEnum.patient,
         createdAt: new Date()
       });
       
