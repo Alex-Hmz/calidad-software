@@ -25,6 +25,12 @@ export const routes: Routes = [
     data: { roles: ['admin', 'patient'] },
     canActivate: [publicGuard], 
   },
+    {
+    path: 'users',
+    loadChildren: () => import('./user/appointment.routes').then(m => m.default),
+    canActivate: [privateGuard], 
+  },
+
   {
     path: 'appointment',
     loadChildren: () => import('./appointment/appointment.routes').then(m => m.default),

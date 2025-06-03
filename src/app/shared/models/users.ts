@@ -1,3 +1,5 @@
+import { UserRoleEnum } from "./enums";
+
 export interface UserProfile {
     name: string;
     email: string;
@@ -8,3 +10,26 @@ export interface UserProfile {
     role: string;
     createdAt: Date;
 }
+
+export interface DoctorProfile extends UserProfile {
+    id: string;
+    specialty: string;
+    dailyAppointments: number;
+    schechule: {
+        start: string; // HH:mm
+        end: string; // HH:mm
+    };
+    role: UserRoleEnum.doctor;
+}
+
+export interface UpdateDoctor extends UserProfile{
+
+    specialty: string;
+    dailyAppointments: number;
+    schechule: {
+        start: string; // HH:mm
+        end: string; // HH:mm
+    };
+    role: UserRoleEnum.doctor;
+}
+

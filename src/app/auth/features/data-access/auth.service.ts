@@ -21,7 +21,7 @@ import {
   Timestamp,
   serverTimestamp
 } from '@angular/fire/firestore';
-import { UserProfile } from '../../../shared/models/users';
+import { DoctorProfile, UserProfile } from '../../../shared/models/users';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -34,7 +34,7 @@ export interface Credentials {
   displayName: string | null;
   refreshToken?: string;
   profilePicture?: string;
-  role?: string | null;
+  role: string | null;
   idCandidate?: string;
 }
 
@@ -181,7 +181,7 @@ export class AuthService {
   /**
    * Crear o actualizar el perfil del usuario en Firestore
    */
-  async createUserProfile(userId: string, profileData: UserProfile): Promise<boolean> {
+  async createUserProfile(userId: string, profileData: UserProfile | DoctorProfile): Promise<boolean> {
     try {
       const userRef = doc(this.firestore, 'users', userId);
       
@@ -304,6 +304,19 @@ export class AuthService {
 
   get authState$(): Observable<User | null> {
     return authState(this.auth);
+  }
+
+  getCurrentRole(): string | null {
+    const user = this.getCurrentUser();
+    return user ? user.role : null;
+  }
+
+  /**
+   * Verificar si el usuario tiene un rol específico
+   */
+  hasRole(role: string): boolean {
+    const user = this.getCurrentUser();
+    return user ? user.role === role : false;
   }
   
 }

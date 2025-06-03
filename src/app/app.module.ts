@@ -22,6 +22,7 @@ import Aura from '@primeng/themes/aura';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
 import { HeaderModule } from './shared/components/header/header.module';
 import { FooterModule } from './shared/components/footer/footer.module';
+import { SidebarModule } from './shared/components/sidebar/sidebar.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { FooterModule } from './shared/components/footer/footer.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     HeaderModule, 
-    FooterModule
+    FooterModule,
+    SidebarModule
 
   ],
   providers: [

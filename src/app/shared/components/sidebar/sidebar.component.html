@@ -1,0 +1,26 @@
+<nav *ngIf="authService.isLoggedIn()" [ngClass]="collapsed ? 'sidebar-collapsed' : 'sidebar-expanded'" class="bg-primary text-white d-flex flex-column p-3">
+    <a *ngIf="authService.hasRole('admin') || authService.hasRole('patient')" routerLink="/appointments/list" class="text-white mb-2">
+        <i class="pi pi-home me-2"></i>
+        <span *ngIf="!collapsed">Home</span>
+    </a>
+    <a *ngIf="authService.hasRole('admin')" routerLink="/users/list" class="text-white mb-2">
+        <i class="pi pi-users me-2"></i>
+        <span *ngIf="!collapsed">Users</span>
+    </a>
+    <a *ngIf="authService.hasRole('admin') || authService.hasRole('doctor')" routerLink="/patients" class="text-white mb-2">
+        <i class="pi pi-user me-2"></i>
+        <span *ngIf="!collapsed">Patients</span>
+    </a>
+    <a *ngIf="authService.hasRole('admin') || authService.hasRole('patient')" routerLink="/profile" class="text-white mb-2">
+        <i class="pi pi-user me-2"></i>
+        <span *ngIf="!collapsed">Profile</span>
+    </a>
+    <a routerLink="/settings" class="text-white mb-2">
+        <i class="pi pi-cog me-2"></i>
+        <span *ngIf="!collapsed">Settings</span>
+    </a>
+    <a (click)="logOut()" class="text-white mt-auto">
+        <i class="pi pi-sign-out me-2"></i>
+        <span *ngIf="!collapsed">Logout</span>
+    </a>
+</nav>

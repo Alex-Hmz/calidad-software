@@ -39,8 +39,6 @@ export class AppointmentsComponent {
     
     if (user) {
       await this.appointmentService.getAppointmentsByUser(user.uid);
-      console.log('Citas actuales:', this.appointmentService.current_appointments());
-      console.log('Historial de citas:', this.appointmentService.historic_appointments());
       
     } else {
       // Si no hay usuario, redirige al login o muestra mensaje

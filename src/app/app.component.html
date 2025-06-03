@@ -1,7 +1,15 @@
-<div class="flex h-screen">
-  <app-header></app-header>
-  <main class="flex-1 bg-gray-100 p-6 overflow-auto">
-    <router-outlet/>
-  </main>
+<div class="d-flex vh-100">
+  <!-- SIDEBAR -->
+  <app-sidebar [collapsed]="isSidebarCollapsed"></app-sidebar>
+
+  <!-- CONTENIDO -->
+  <div class="flex-grow-1 d-flex flex-column">
+    <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+    
+    <main class="flex-grow-1 overflow-auto p-3 bg-light">
+      <router-outlet></router-outlet>
+    </main>
+
+    <app-footer></app-footer>
+  </div>
 </div>
-<app-footer></app-footer>
