@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
   authService = inject(AuthService)
   private _router = inject(Router);
+  sidebarVisible:boolean = false;
+
 
   async logOut() {
     await this.authService.logout();

@@ -1,6 +1,20 @@
 
-    <header class="d-flex align-items-center justify-content-between" style="background-color: #007ad9; color: white; padding: 1rem;">
-        <h1 class="mb-0">Agenda Medica</h1>
+<p-drawer [(visible)]="sidebarVisible" position="left" [modal]="false" mode="side">
+  <!-- Tu contenido del menú -->
+  <div class="p-4">
+    <a routerLink="/dashboard" class="block mb-2"><i class="pi pi-home"></i> Dashboard</a>
+    <a routerLink="/expediente" class="block mb-2"><i class="pi pi-book"></i> Expediente</a>
+  </div>
+</p-drawer>
+
+<header class="d-flex align-items-center justify-content-between" style="background-color: #007ad9; color: white; padding: 1rem;">
+
+    <div class="d-flex align-items-center gap-2">
+        <button pButton icon="pi pi-bars" class="p-button-sm p-button-text" (click)="sidebarVisible = !sidebarVisible"></button>
+        <h1 class="mb-0">Agenda Médica</h1>
+    </div>
+    <div>
+
         @if(authService.isLoggedIn()){
             <button 
                 pButton 
@@ -18,5 +32,6 @@
                 (click)="goToLogin()">
             </button>
         }
+    </div>
 
-    </header>
+</header>
