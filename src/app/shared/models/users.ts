@@ -9,6 +9,7 @@ export interface UserProfile {
     medicalConditions?: string;
     role: string;
     createdAt: Date;
+    isActive?: boolean; // Optional field to indicate if the user is active
 }
 
 export interface DoctorProfile extends UserProfile {

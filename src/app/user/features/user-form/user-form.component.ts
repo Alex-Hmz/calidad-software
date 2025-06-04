@@ -48,7 +48,12 @@ export class UserFormComponent {
       // Credenciales de acceso
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
-    }, { validators: this.horarioValidator });
+    }, 
+    { 
+      validators: [
+        this.horarioValidator,
+       this.passwordMatchValidator]
+     });
   }
 
   ngOnInit(): void {
@@ -79,6 +84,14 @@ export class UserFormComponent {
         })
     }
 
+    this.form.get('startTime')?.valueChanges.subscribe(() => {
+      this.form.updateValueAndValidity();
+      console.log("ES VALIDISIMO?: " + this.form.valid);
+      
+    });
+    this.form.get('endTime')?.valueChanges.subscribe(() => {
+      this.form.updateValueAndValidity();
+    });
   }
 
   async submit(): Promise<void> {
@@ -117,9 +130,9 @@ export class UserFormComponent {
         const success = await this.authService.createUserProfile(user.uid, doctorProfile);
         if (success) {
           this.success = 'Registro exitoso';
-          setTimeout(() => {
-          this.router.navigate(['/users/list']);
-          }, 2000);
+          // setTimeout(() => {
+          // this.router.navigate(['/users/list']);
+          // }, 2000);
         } else {
           this.error = 'Error al crear el perfil del usuario';
         }
@@ -143,24 +156,23 @@ export class UserFormComponent {
     // }
   }
 
-    setAvailableTimes() {
-      let startHour = 9;
-      // const currentHour = base.getHours();
-      this.availableTimes = [];
-      for (let hour = startHour; hour < 18; hour++) {
-        this.availableTimes.push({
-          label: `${hour.toString().padStart(2, '0')}:00`,
-          value: `${hour.toString().padStart(2, '0')}:00`
-        });
-      }
+  setAvailableTimes() {
+    let startHour = 9;
+    this.availableTimes = [];
+    for (let hour = startHour; hour < 18; hour++) {
+      this.availableTimes.push({
+        label: `${hour.toString().padStart(2, '0')}:00`,
+        value: `${hour.toString().padStart(2, '0')}:00`
+      });
+    }
       
   }
 
   horarioValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
     const start = group.get('startTime')?.value;
     const end = group.get('endTime')?.value;
-    console.log("Validando horario:");
-    console.log("Validando horario:", end);
+    console.log("Validando horario start: ", start);
+    console.log("Validando horario end: ", end);
     
 
     // Si alguno no está definido aún, no validar
@@ -173,5 +185,15 @@ export class UserFormComponent {
 
     return null;
   };
-
+  passwordMatchValidator(form: FormGroup) {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    
+    if (password !== confirmPassword) {
+      form.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    }
+    
+    return null;
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { collection, CollectionReference, doc, Firestore, getDoc, getDocs, query, where } from '@angular/fire/firestore';
 import { DoctorProfile } from '../../shared/models/users';
 import { UserRoleEnum } from '../../shared/models/enums';
@@ -27,6 +27,10 @@ export class UserService {
       error: false
     });
 
+    users = computed(() => this._state().users);
+    loading = computed(() => this._state().loading);
+    error = computed(() => this._state().error);
+
   async obtenerUsuarios(): Promise<Boolean> {
         this._state.update((state) => ({
         ...state,
@@ -35,11 +39,14 @@ export class UserService {
     }));
         try{
           
-          const q = query(this.usersRef, where('role', '==', UserRoleEnum.doctor));
+          const q = query(
+          this.usersRef,
+          where('role', '==', UserRoleEnum.doctor),
+          );
           const snapshot = await getDocs(q);
-          const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DoctorProfile));
-    
-          const now = new Date();
+            const users = snapshot.docs
+            .map(doc => ({ id: doc.id, ...doc.data() } as DoctorProfile))
+            .filter(user => user.isActive === false);
     
           if(users){
             this._state.update((state) => ({

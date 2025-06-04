@@ -189,7 +189,7 @@ export class AuthService {
       const dataWithTimestamp = {
         ...profileData,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: profileData.createdAt ?? serverTimestamp()
       };
       
       await setDoc(userRef, dataWithTimestamp);
