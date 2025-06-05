@@ -27,7 +27,7 @@ export const routes: Routes = [
   },
     {
     path: 'users',
-    loadChildren: () => import('./user/appointment.routes').then(m => m.default),
+    loadChildren: () => import('./user/users.routes').then(m => m.default),
     canActivate: [privateGuard], 
   },
 

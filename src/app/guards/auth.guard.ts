@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../auth/features/data-access/auth.service';
 import { map, take } from 'rxjs/operators';
+import { AuthService } from '../shared/services/auth/auth.service';
 
 /**
  * Guard de autenticación que verifica si el usuario está autenticado

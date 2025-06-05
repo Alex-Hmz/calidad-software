@@ -5,6 +5,7 @@ import { Auth } from '@angular/fire/auth';
 import { Appointment, CreateAppointment } from '../../models/appointment';
 import { Router } from '@angular/router';
 import { AppointmentStatusEnum } from '../../../shared/models/enums';
+import { AppointmentTypeService } from '../../../shared/services/appointment-type-data-access/appointment-type.service';
 
 @Component({
   selector: 'app-create-appointment',
@@ -17,16 +18,18 @@ export class CreateAppointmentComponent {
   minDate: Date = new Date();
   availableTimes:{label:string, value:string}[] = [];
 
+
   constructor(
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
     private auth: Auth,
     private router: Router,
-
+    public appointmentTypeService: AppointmentTypeService,
   ) {
     this.form = this.fb.group({
       date: ['', Validators.required],
       time: [null, Validators.required],
+      type: [null, Validators.required],
       reason: ['', Validators.required]
     });
 
@@ -36,7 +39,7 @@ export class CreateAppointmentComponent {
 
   ngOnInit() {
 
-    this.setAvailableTimes();
+    this.setAvailableTimes(new Date());
     // Subscribe to date changes
     this.form.get('date')?.valueChanges.subscribe((selectedDate: Date | string) => {
       this.setAvailableTimes(selectedDate);
@@ -68,6 +71,8 @@ export class CreateAppointmentComponent {
     };
 
     try {
+
+
       await this.appointmentService.createAppointment(appointment);
       alert('Cita agendada exitosamente');
       this.form.reset();
@@ -76,38 +81,49 @@ export class CreateAppointmentComponent {
     }
   }
 
-  setAvailableTimes(selectedDate?: Date | string) {
+  async setAvailableTimes(selectedDate?: Date | string) {
       let base = new Date();
+      let bookedHours: string[] = [];
+
       if (selectedDate) {
         base = new Date(selectedDate);
       }
 
-      const today = new Date();
-      const isToday =
-      base.getFullYear() === today.getFullYear() &&
-      base.getMonth() === today.getMonth() &&
-      base.getDate() === today.getDate();
+    
+      try{
+        bookedHours = await this.appointmentService.getBookedHours(base.toISOString().split('T')[0]);
+        const today = new Date();
+        const isToday =
+        base.getFullYear() === today.getFullYear() &&
+        base.getMonth() === today.getMonth() &&
+        base.getDate() === today.getDate();
 
-      let startHour = 9;
-      if (isToday) {
-        const currentHour = today.getHours();
-        startHour = Math.max(currentHour + 1, 9); //Sí es de madrugada, empieza a las 9
-        if (currentHour >= 17) {
-          startHour = 9; // No más citas por hoy
-          this.minDate = new Date();
-          this.minDate.setHours(0, 0, 0, 0);
-          this.minDate.setDate(today.getDate() + 1);
+        let startHour = 9;
+        if (isToday) {
+          const currentHour = today.getHours();
+          startHour = Math.max(currentHour + 1, 9); //Sí es de madrugada, empieza a las 9
+          if (currentHour >= 17) {
+            startHour = 9; // No más citas por hoy
+            this.minDate = new Date();
+            this.minDate.setHours(0, 0, 0, 0);
+            this.minDate.setDate(today.getDate() + 1);
+          }
         }
+        
+        // const currentHour = base.getHours();
+        this.availableTimes = [];
+        for (let hour = startHour; hour < 18; hour++) {
+          if(!bookedHours.includes(`${hour.toString().padStart(2, '0')}:00`)){
+            this.availableTimes.push({
+              label: `${hour.toString().padStart(2, '0')}:00`,
+              value: `${hour.toString().padStart(2, '0')}:00`
+            });
+          }
+        }
+      }catch(e){
+        alert('Error al obtener las horas disponibles: ' + (e as any).message);
       }
-      
-      // const currentHour = base.getHours();
-      this.availableTimes = [];
-      for (let hour = startHour; hour < 18; hour++) {
-        this.availableTimes.push({
-          label: `${hour.toString().padStart(2, '0')}:00`,
-          value: `${hour.toString().padStart(2, '0')}:00`
-        });
-      }
+
       
   }
     

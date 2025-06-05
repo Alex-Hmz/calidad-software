@@ -2,8 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Appointment } from '../../models/appointment';
 import { AppointmentService } from '../../data-access/appointment.service';
-import { AuthService } from '../../../auth/features/data-access/auth.service';
 import { AppointmentStatusEnum } from '../../../shared/models/enums';
+import { AuthService } from '../../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-appointments',
@@ -34,8 +34,6 @@ export class AppointmentsComponent {
 
   async getAppointments() {
     const user = this._authService.getCurrentUser();
-    console.log('Usuario actual:', user);
-    console.log(this.appointmentService.error);
     
     if (user) {
       await this.appointmentService.getAppointmentsByUser(user.uid);

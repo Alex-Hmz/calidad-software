@@ -19,6 +19,32 @@ export class AppointmentService {
 
   constructor(private firestore: Firestore, private auth: Auth) {
     this.appointmentsRef = collection(this.firestore, 'appointments');
+
+
+// const medicalTests = [
+//   { name: "Biometría Hemática", price: 100, specialtyId: "8coQoXzrZXayVTzLiLVV" }, // Medicina General
+//   { name: "Examen General de Orina", price: 80, specialtyId: "8coQoXzrZXayVTzLiLVV" },
+//   { name: "Prueba de Embarazo", price: 90, specialtyId: "IPHTUZ4TnlrOAnQRCvGu" }, // Ginecología
+//   { name: "Papanicolau", price: 150, specialtyId: "IPHTUZ4TnlrOAnQRCvGu" },
+//   { name: "Electrocardiograma", price: 200, specialtyId: "FA0exkPh8vWiqtCfPSeu" }, // Cardiología
+//   { name: "Examen de la Vista", price: 80, specialtyId: "miD2MgSXvVe65SgabLkvu" }, // Oftalmología
+//   { name: "Radiografía de Tórax", price: 300, specialtyId: "Kpmb0cy4UrtYuHxAiRYe" }, // Traumatología
+//   { name: "Glucosa Capilar", price: 40, specialtyId: "I2onxp9VkLyQbxU6eAID" }, // Nutrición
+//   { name: "Prueba COVID (rápida)", price: 100, specialtyId: "8coQoXzrZXayVTzLiLVV" }, // Medicina General
+//   { name: "Perfil Lipídico", price: 200, specialtyId: "FA0exkPh8vWiqtCfPSeu" } // Cardiología
+// ].map((item) => ({
+//   ...item,
+//   isValid: true,
+//   createdAt: new Date(),
+//   updatedAt: new Date()
+// }));
+
+
+//     medicalTests.forEach(async (data) => {
+//       await addDoc(collection(this.firestore, "medicalTests"), data );
+      
+//     });
+
   }
 
     private _state = signal<AppointmentState>({
@@ -81,6 +107,17 @@ export class AppointmentService {
     }
   }
 
+  async getBookedHours(date: string):Promise<string[]> {
+    const appointmentsRef = collection(this.firestore, 'appointments');
+    const q = query(
+      appointmentsRef,
+      where('date', '==', date)
+    );
+
+    const snapshot = await getDocs(q);
+    const citas = snapshot.docs.map(doc => doc.data() as Appointment);
+    return citas.map(c => c.time); // ["09:00", "12:00", ...]
+  }
   async createAppointment(appointment: CreateAppointment) {
     try {
       await addDoc(this.appointmentsRef, appointment);

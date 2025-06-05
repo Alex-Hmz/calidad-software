@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../data-access/user.service';
 import { DoctorProfile } from '../../../shared/models/users';
-import { AuthService } from '../../../auth/features/data-access/auth.service';
+import { AuthService } from '../../../shared/services/auth/auth.service';
 import { UserRoleEnum } from '../../../shared/models/enums';
 
 @Component({

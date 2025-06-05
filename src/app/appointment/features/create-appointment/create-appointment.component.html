@@ -61,13 +61,24 @@
               >
             </p-select>
           </div>
-
-          <!-- <p-datepicker formControlName="time" [timeOnly]="true" hourFormat="24">
-              <ng-template #date let-date>
-                  <strong *ngIf="date.hour > 0 && date.hour < 9; else elseBlock" style="display: none;"></strong>
-                  <ng-template #elseBlock>{{ date.hour }}</ng-template>
-              </ng-template>
-          </p-datepicker> -->
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="time" class="form-label fw-semibold">Especifique el tipo de consulta</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light"><i class="pi pi-book"></i></span>
+          <div >
+            <p-select
+              formControlName="type"
+              [options]="appointmentTypeService.types()"
+              [optionValue]="'id'"
+              placeholder="Selecciona una cita"
+              optionLabel="name"
+              [style.width.%]="100"
+              [panelStyle]="{width: '100%'}"
+            >
+            </p-select>
+          </div>
         </div>
       </div>
 
