@@ -1,93 +1,183 @@
 <!-- <div class="contenedor d-flex justify-content-center align-items-center vh-100"> -->
 
-<div class="component-container d-flex justify-content-center align-items-center">
-
-  <div class="component-card card p-4 shadow">
-    <div class="d-flex  mb-3 justify-content-between align-items-center">
-      <button type="button" class="btn btn-primary w-20" (click)="goBack()">
-          Volver a citas
+<div class="container py-5">
+  <div class="card p-3 shadow-sm mx-auto" style="max-width: 700px;">
+    <div class="d-flex mb-3 justify-content-between align-items-center">
+      <button type="button" class="btn btn-outline-primary" (click)="goBack()">
+        <i class="pi pi-arrow-left me-2"></i>Volver a citas
       </button>
     </div>
-    
-    <!-- <form [formGroup]="form" (ngSubmit)="submit()" class="p-4 shadow rounded bg-light">
-      <h4 class="mb-4">Agendar cita médica</h4>
-    
-      <div class="mb-3">
-        <label for="date" class="form-label">Fecha</label>
-        <input type="date" id="date" formControlName="date" class="form-control">
-      </div>
-    
-      <div class="mb-3">
-        <label for="time" class="form-label">Hora</label>
-        <input type="time" id="time" formControlName="time" class="form-control">
-        <p-datepicker id="time" inputId="calendar-timeonly" formControlName="time" [timeOnly]="true" class="form-control" />
 
-      </div>
-    
-      <div class="mb-3">
-        <label for="reason" class="form-label">Motivo</label>
-        <textarea id="reason" formControlName="reason" class="form-control" rows="3"></textarea>
-      </div>
-    
-      <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
-        Agendar cita
-      </button>
-    </form> -->
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="card register-card p-4 border-0 shadow-sm">
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <h2 class="text-center fw-bold mb-3">Agendar cita médica</h2>
+            <p class="text-center text-muted mb-4">Completa los datos para agendar una cita</p>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="p-4 rounded bg-white shadow card" style="max-width: 400px; margin: auto;">
-      <h3 class="mb-4 fw-bold text-dark">Agendar cita médica</h3>
+            <!-- Fecha y Hora -->
+            <h4 class="mb-3"><i class="pi pi-calendar"></i> Fecha y hora</h4>
+            <div class="row gx-2">
+              <div class="col-12 col-sm-6 mb-4">
+                <div class="p-field">
+                  <label for="date" class="d-block mb-2 fw-medium">Fecha</label>
+                  <div class="input-group w-100">
+                    <span class="input-group-text bg-light"><i class="pi pi-calendar"></i></span>
+                    <p-datepicker 
+                      id="date" 
+                      formControlName="date" 
+                      dateFormat="yy-mm-dd"  
+                      [readonlyInput]="true" 
+                      [minDate]="minDate" 
+                      class="flex-grow-1">
+                    </p-datepicker>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 mb-4">
+                <div class="p-field">
+                  <label for="time" class="d-block mb-2 fw-medium">Hora</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="pi pi-clock"></i></span>
+                    <p-select
+                      id="time"
+                      formControlName="time"
+                      [options]="availableTimes"
+                      [optionValue]="'value'"
+                      placeholder="Selecciona una hora"
+                      optionLabel="label"
+                      class="flex-grow-1"
+                    >
+                    </p-select>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      <div class="mb-3">
-        <label for="date" class="form-label fw-semibold">Fecha</label>
-        <div class="input-group">
-          <span class="input-group-text bg-light"><i class="pi pi-calendar"></i></span>
-          <p-datepicker id="date" formControlName="date" dateFormat="yy-mm-dd"  [readonlyInput]="true" [minDate]="minDate" class="form-control-custom"></p-datepicker>
+            <!-- Tipo de consulta -->
+            <h4 class="mb-3"><i class="pi pi-book"></i> Tipo de consulta</h4>
+            <div class="p-field mb-4">
+              <label for="type" class="d-block mb-2 fw-medium">Especifique el tipo de consulta</label>
+              <div class="input-group w-100">
+                <span class="input-group-text bg-light"><i class="pi pi-book"></i></span>
+                <p-select
+                  formControlName="typeId"
+                  [options]="appointmentTypeService.types()"
+                  [optionValue]="'id'"
+                  placeholder="Selecciona una cita"
+                  optionLabel="name"
+                  [panelStyle]="{width: '100%'}"
+                  class="flex-grow-1"
+                >
+                </p-select>
+              </div>
+            </div>
+
+            <!-- Motivo -->
+            <h4 class="mb-3"><i class="pi pi-comment"></i> Motivo</h4>
+            <div class="p-field mb-4">
+              <label for="reason" class="d-block mb-2 fw-medium">Motivo</label>
+              <textarea id="reason" pTextarea formControlName="reason" rows="3" class="form-control" placeholder="Describe el motivo de la cita" style="resize: none; max-height: 100px;"></textarea>
+            </div>
+
+            <!-- Tracing toggle -->
+            <div class="p-field mb-4">
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="isTraced"
+                  formControlName="isTraced"
+                />
+                <label class="form-check-label fw-medium" for="isTraced">
+                  ¿Esta cita es un seguimiento?
+                </label>
+              </div>
+            </div>
+
+            <!-- Tracing select, shown only if isTraced is true -->
+             @if(form.get('isTraced')?.value){
+              <div class="p-field mb-4">
+                <label for="traceId" class="d-block mb-2 fw-medium">Selecciona el seguimiento</label>
+                <p-select
+                  id="traceId"
+                  formControlName="traceId"
+                  [options]="appointmentTraceService.traces()"
+                  [optionValue]="'id'"
+                  optionLabel="traceName"
+                  placeholder="Selecciona un seguimiento"
+                  class="w-100"
+                ></p-select>
+                <small
+                  *ngIf="form.get('traceId')?.invalid && form.get('traceId')?.touched"
+                  class="p-error mt-1 d-block"
+                >
+                  Debes seleccionar un seguimiento
+                </small>
+              </div>
+             }
+
+            <!-- New tracing toggle, shown only if isTraced is true -->
+             @if(form.get('isTraced')?.value) {
+              <div class="p-field mb-4">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="isNewTrace"
+                    formControlName="isNewTrace"
+                  />
+                  <label class="form-check-label fw-medium" for="isNewTrace">
+                    ¿Crear nuevo seguimiento?
+                  </label>
+                </div>
+              </div>
+              @if(form.get('isNewTrace')?.value) {
+                <div class="p-field mb-4">
+                  <label for="traceName" class="d-block mb-2 fw-medium">Nombre del seguimiento</label>
+                  <span class="p-input-icon-left w-100">
+                    <input 
+                      id="traceName" 
+                      type="text" 
+                      pInputText 
+                      formControlName="traceName" 
+                      placeholder="Indique el nombre"
+                      class="w-100 p-inputtext-md"
+                    >
+                  </span>
+                  <small
+                    *ngIf="form.get('traceName')?.invalid && form.get('traceName')?.touched"
+                    class="p-error mt-1 d-block"
+                  >
+                    El nombre del seguimiento es requerido
+                  </small>
+                </div>
+                <div class="p-field mb-4">
+                  <label for="traceNotes" class="d-block mb-2 fw-medium">Observaciones</label>
+                  <textarea 
+                    id="traceNotes" 
+                    pTextarea 
+                    formControlName="traceNotes" 
+                    rows="3" 
+                    class="form-control" 
+                    placeholder="Describe observaciones generales" 
+                    style="resize: none; max-height: 100px;">
+                  </textarea>
+                  <small
+                    *ngIf="form.get('traceNotes')?.invalid && form.get('traceNotes')?.touched"
+                    class="p-error mt-1 d-block"
+                  >
+                    Las observaciones son requeridas
+                  </small>
+                </div>
+              }
+             }
+
+
+            <button type="submit" pButton label="Agendar cita" class="p-button-raised p-button-success w-100 p-3 mb-3 fw-bold" [disabled]="form.invalid"></button>
+          </form>
         </div>
       </div>
-
-      <div class="mb-3">
-        <label for="time" class="form-label fw-semibold">Hora</label>
-        <div class="input-group">
-          <span class="input-group-text bg-light"><i class="pi pi-clock"></i></span>
-          <div >
-            <p-select
-              formControlName="time"
-              [options]="availableTimes"
-              [optionValue]="'value'"
-              placeholder="Selecciona una hora"
-              optionLabel="label"
-              [style.width.%]="100"
-              [panelStyle]="{width: '100%'}"
-              >
-            </p-select>
-          </div>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label for="time" class="form-label fw-semibold">Especifique el tipo de consulta</label>
-        <div class="input-group">
-          <span class="input-group-text bg-light"><i class="pi pi-book"></i></span>
-          <div >
-            <p-select
-              formControlName="type"
-              [options]="appointmentTypeService.types()"
-              [optionValue]="'id'"
-              placeholder="Selecciona una cita"
-              optionLabel="name"
-              [style.width.%]="100"
-              [panelStyle]="{width: '100%'}"
-            >
-            </p-select>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label for="reason" class="form-label fw-semibold">Motivo</label>
-        <textarea id="reason" pTextarea formControlName="reason" rows="3" class="form-control" placeholder="Describe el motivo de la cita" style="resize: none; max-height: 100px;"></textarea>
-      </div>
-
-      <button type="submit" pButton label="Agendar cita" class=" p-button-success fw-bold py-2" [disabled]="form.invalid"></button>
-    </form>
+    </div>
   </div>
 </div>

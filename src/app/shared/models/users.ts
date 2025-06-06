@@ -12,6 +12,17 @@ export interface UserProfile {
     isActive?: boolean; // Optional field to indicate if the user is active
 }
 
+export interface CreateDoctorProfile extends UserProfile {
+    specialty: string;
+    dailyAppointments: number;
+    schechule: {
+        start: string; // HH:mm
+        end: string; // HH:mm
+    };
+    role: UserRoleEnum.doctor;
+    isFirstLogin:boolean;
+}
+
 export interface DoctorProfile extends UserProfile {
     id: string;
     specialty: string;
@@ -21,6 +32,7 @@ export interface DoctorProfile extends UserProfile {
         end: string; // HH:mm
     };
     role: UserRoleEnum.doctor;
+    sFirstLogin:boolean;
 }
 
 export interface UpdateDoctor extends UserProfile{
@@ -32,5 +44,7 @@ export interface UpdateDoctor extends UserProfile{
         end: string; // HH:mm
     };
     role: UserRoleEnum.doctor;
+    isFirstLogin:boolean;
+
 }
 

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../data-access/user.service';
-import { DoctorProfile } from '../../../shared/models/users';
+import { UserService } from '../../../shared/services/users/user.service';
+import { CreateDoctorProfile, DoctorProfile } from '../../../shared/models/users';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { UserRoleEnum } from '../../../shared/models/enums';
 
@@ -62,7 +62,7 @@ export class UserFormComponent {
     this.setAvailableTimes();
 
     if (this.modoEdicion) {
-      this.userService.obtenerUsuario(this.id!)
+      this.userService.getUser(this.id!)
         .then((usuario) => {
           if (usuario) {
             this.form.patchValue({
@@ -75,7 +75,6 @@ export class UserFormComponent {
               startTime: usuario.schechule?.start,
               endTime: usuario.schechule?.end,
               dailyAppointments: usuario.dailyAppointments,
-              // Password fields are intentionally left blank for security
             });
           } else {
             console.error('Usuario no encontrado');
@@ -85,9 +84,7 @@ export class UserFormComponent {
     }
 
     this.form.get('startTime')?.valueChanges.subscribe(() => {
-      this.form.updateValueAndValidity();
-      console.log("ES VALIDISIMO?: " + this.form.valid);
-      
+      this.form.updateValueAndValidity();      
     });
     this.form.get('endTime')?.valueChanges.subscribe(() => {
       this.form.updateValueAndValidity();
@@ -107,11 +104,10 @@ export class UserFormComponent {
     } = this.form.value;
     
     try {
-      const user = await this.authService.register(email, password);
+      const user = await this.authService.register(email, password, UserRoleEnum.doctor);
 
       if (user) {
-        const doctorProfile: DoctorProfile = {
-          id: user.uid,
+        const doctorProfile: CreateDoctorProfile = {
           name,
           email,
           birthdate,
@@ -124,7 +120,8 @@ export class UserFormComponent {
           dailyAppointments,
           role: UserRoleEnum.doctor, 
           specialty, // Agregar especialidad
-          createdAt: new Date()
+          createdAt: new Date(),
+          isFirstLogin: true
         };
 
         const success = await this.authService.createUserProfile(user.uid, doctorProfile);

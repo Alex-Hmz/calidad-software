@@ -24,6 +24,7 @@ import {
 import { DoctorProfile, UserProfile } from '../../models/users';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserRoleEnum } from '../../models/enums';
 
 /**
  * Interfaz para las credenciales del usuario autenticado
@@ -70,6 +71,9 @@ export class AuthService {
               refreshToken: user.refreshToken,
               role: userProfile.role,
             };
+            console.log("El usuario ha iniciado sesión:", credentials);
+
+            
             this.setCredentials(credentials, true);
             this.loggedInSubject.next(true);
           } else {
@@ -89,9 +93,15 @@ export class AuthService {
   /**
    * Registra un nuevo usuario con correo electrónico y contraseña
    */
-  async register(email: string, password: string): Promise<User> {
+  async register(email: string, password: string, role:UserRoleEnum): Promise<User> {
     try {
       const result = await createUserWithEmailAndPassword(this.auth, email, password);
+
+      if(role === UserRoleEnum.doctor) {
+        signOut(this.auth)
+      }
+
+
       return result.user;
     } catch (error: any) {
       // Mejorar los mensajes de error
@@ -192,7 +202,7 @@ export class AuthService {
         updatedAt: profileData.createdAt ?? serverTimestamp()
       };
       
-      await setDoc(userRef, dataWithTimestamp);
+      await setDoc(userRef, dataWithTimestamp).then(() => {});
       return true;
     } catch (error: any) {
       throw new Error(`Error al crear el perfil del usuario: ${error.message}`);
@@ -309,6 +319,12 @@ export class AuthService {
   getCurrentRole(): string | null {
     const user = this.getCurrentUser();
     return user ? user.role : null;
+  }
+
+  getCurrentUserId(): string | null {
+    const user = this.getCurrentUser();
+    return user ? user.uid : null;
+
   }
 
   /**

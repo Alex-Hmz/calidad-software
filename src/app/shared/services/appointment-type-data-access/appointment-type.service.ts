@@ -1,7 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { collection, CollectionReference, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { AppointmentType } from '../../models/appointment-type';
-import { Specialty } from '../../models/specialty';
 
 interface AppointmentTypeState{
     types: AppointmentType[];
@@ -77,4 +76,11 @@ export class AppointmentTypeService {
       }));
     }
   }
+
+  getSpecialtyIdByAppointmentTypeId(appointmentTypeId: string): string | null {
+    const types = this._state().types;
+    const match = types.find(type => type.id === appointmentTypeId);
+    return match ? match.specialtyId : null;
+  }
+
 }

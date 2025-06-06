@@ -1,7 +1,9 @@
 export enum AppointmentStatusEnum {
     Confirmada = 'Confirmada',
     Pendiente = 'Pendiente',
-    Cancelada = 'Cancelada'
+    Cancelada = 'Cancelada',
+    Realizada = 'Realizada',
+    NoPresentado = 'No Presentado',
 }
 
 export enum UserRoleEnum{

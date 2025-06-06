@@ -1,8 +1,8 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { Firestore, collection, addDoc, getDocs, query, where, CollectionReference, updateDoc, doc } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
-import { Appointment, CreateAppointment } from '../models/appointment';
-import { AppointmentStatusEnum } from '../../shared/models/enums';
+import { Appointment, CreateAppointment } from '../../../appointment/models/appointment';
+import { AppointmentStatusEnum } from '../../models/enums';
 
 interface AppointmentState{
     current_appointments: Appointment[];
@@ -107,11 +107,12 @@ export class AppointmentService {
     }
   }
 
-  async getBookedHours(date: string):Promise<string[]> {
+  async getBookedHoursByUser(date: string, userId:string):Promise<string[]> {
     const appointmentsRef = collection(this.firestore, 'appointments');
     const q = query(
       appointmentsRef,
       where('date', '==', date)
+      , where('userId', '==', userId)
     );
 
     const snapshot = await getDocs(q);
@@ -120,9 +121,11 @@ export class AppointmentService {
   }
   async createAppointment(appointment: CreateAppointment) {
     try {
-      await addDoc(this.appointmentsRef, appointment);
+        const docRef = await addDoc(this.appointmentsRef, appointment);
+        return docRef.id;
+
     } catch (error) {
-      throw new Error('Error al crear la cita: ' + (error as any).message);
+      throw new Error((error as any).message);
     }
   }
 
@@ -134,5 +137,31 @@ export class AppointmentService {
     } catch (error) {
       throw new Error('Error al actualizar el estado: ' + (error as any).message);
     }
+  }
+
+  async getTotalAppointmentsByDoctorAndDate(doctorId: string, date: string): Promise<number> {
+    const appointmentsRef = collection(this.firestore, 'appointments');
+    const q = query(
+      appointmentsRef,
+      where('doctorId', '==', doctorId),
+      where('date', '==', date)
+    );
+
+    return await getDocs(q).then(snapshot => {
+      return snapshot.docs.length;
+    }).catch(error => {
+      console.error('Error al obtener citas:', error);
+      throw new Error('Error al obtener citas: ' + (error as any).message);
+    });
+  }
+
+  async asignDoctorToAppointment(appointmentId: string, doctorId: string): Promise<void> {
+
+        const appointmentRef = doc(this.appointmentsRef, appointmentId);
+          return await updateDoc(appointmentRef, {
+            doctorId,
+            estado: AppointmentStatusEnum.Pendiente
+          });
+
   }
 }

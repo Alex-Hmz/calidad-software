@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppointmentService } from '../appointment/data-access/appointment.service';
 import { Auth } from '@angular/fire/auth';
-import { Appointment } from '../appointment/models/appointment';
 
 @Component({
   selector: 'app-home',
@@ -11,26 +9,15 @@ import { Appointment } from '../appointment/models/appointment';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  citasActuales: Appointment[] = [];
-  historialCitas: Appointment[] = [];
+
 
   constructor(
     private router: Router,
-    private appointmentService: AppointmentService,
     private auth: Auth
   ) {}
 
   async ngOnInit(): Promise<void> {
-    const user = this.auth.currentUser;
 
-    // if (user) {
-    //   const { actuales, historico } = await this.appointmentService.getAppointmentsByUser(user.uid);
-    //   this.citasActuales = actuales;
-    //   this.historialCitas = historico;
-    // } else {
-    //   // Si no hay usuario, redirige al login o muestra mensaje
-    //   this.router.navigate(['/auth/login']);
-    // }
   }
 
 }

@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
     
     try {
       // Crear el usuario con email y contraseña
-      const user = await this.authService.register(email, password);
+      const user = await this.authService.register(email, password, UserRoleEnum.patient);
       
       // Crear el perfil del usuario con la información adicional
       await this.authService.createUserProfile(user.uid, {

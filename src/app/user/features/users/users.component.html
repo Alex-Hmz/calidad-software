@@ -28,8 +28,8 @@
                 <div class="d-flex justify-content-around align-items-center p-3 border rounded shadow-sm">
                   <div><strong>Nombre:</strong> {{ user.name }}</div>
                   <div><strong>Email:</strong> {{ user.email }}</div>
-                  <div><strong>Especialidad:</strong> {{ user.specialty }}</div>
-                  <p-tag [value]="user.isActive ? 'Inactivo' : 'Activo'" severity="info"></p-tag>
+                  <div><strong>Especialidad:</strong> {{ user.specialtyName }}</div>
+                  <!-- <p-tag [value]="user.isActive ? 'Inactivo' : 'Activo'" severity="info"></p-tag> -->
                   <div>
                 <p-button icon="pi pi-trash" aria-label="Delete" (onClick)="delete(user.id)"></p-button>
                   </div>

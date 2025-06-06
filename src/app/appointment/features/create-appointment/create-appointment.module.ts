@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { SelectModule } from 'primeng/select';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [CreateAppointmentComponent],
@@ -22,7 +23,8 @@ import { SelectModule } from 'primeng/select';
     ButtonModule,
     IconFieldModule,
     InputIconModule,
-    SelectModule
+    SelectModule,
+    InputTextModule
   ],
   exports: [CreateAppointmentComponent],
 })

@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Appointment } from '../../models/appointment';
-import { AppointmentService } from '../../data-access/appointment.service';
+import { AppointmentService } from '../../../shared/services/appointments/appointment.service';
 import { AppointmentStatusEnum } from '../../../shared/models/enums';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 
@@ -12,8 +11,7 @@ import { AuthService } from '../../../shared/services/auth/auth.service';
   styleUrl: './appointments.component.scss'
 })
 export class AppointmentsComponent {
-  citasActuales: Appointment[] = [];
-  historialCitas: Appointment[] = [];
+
 
 
 

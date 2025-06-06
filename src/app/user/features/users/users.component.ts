@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../data-access/user.service';
+import { UserService } from '../../../shared/services/users/user.service';
 import { AuthService } from '../../../shared/services/auth/auth.service';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-users',
@@ -14,21 +15,20 @@ export class UsersComponent {
     constructor(
     private router: Router,
     private _authService: AuthService,
-    public userService: UserService
+    public userService: UserService,
+    private auth: Auth,
+    
   ) {
   }
   async ngOnInit(): Promise<void> {
-
     this.getUsers();
   }
 
   async getUsers() {
     const user = this._authService.getCurrentUser();
-    console.log('Usuario actual:', user);
-    console.log(this.userService.error);
     
     if (user) {
-      await this.userService.obtenerUsuarios();
+      await this.userService.getUsers();
       
     } else {
       // Si no hay usuario, redirige al login o muestra mensaje
@@ -39,14 +39,10 @@ export class UsersComponent {
 
   async delete(id:string) {
     // Implementar lógica de eliminación de cita
-    console.log('Eliminar doctor con ID:', id);
-    
-    const doctor = await this.userService.obtenerUsuario(id);
+    const doctor = await this.userService.getUser(id);
 
     if (doctor != undefined) {
 
-      console.log('Doctor encontrado:', doctor);
-      
       this._authService.createUserProfile(id, {...doctor, isActive: false})
         .then(() => {
           this.getUsers()
@@ -63,7 +59,7 @@ export class UsersComponent {
 
 
   crearDoctor() {
-    this.router.navigate(['appointment/create']); // redirige a formulario de nueva cita
+    this.router.navigate(['users/create']); // redirige a formulario de nueva cita
     }
 
 
