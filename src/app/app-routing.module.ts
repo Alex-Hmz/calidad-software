@@ -51,6 +51,12 @@ export const routes: Routes = [
     canActivate: [privateGuard], 
   },
   {
+    path: 'admin',
+    loadChildren: () => import('./admin-panel/date-configt.routes').then(m => m.default),
+    data: { roles: ['admin'] },
+    canActivate: [privateGuard], 
+  },
+  {
     path: 'home',
     loadChildren: () => import('./home/home.routes').then(m => m.default),
     canActivate: [publicGuard], 

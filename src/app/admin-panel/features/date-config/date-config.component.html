@@ -1,0 +1,24 @@
+<div class="container py-4">
+  <div class="card p-4 shadow-sm mx-auto" style="max-width: 400px;">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <h3 class="mb-3">Bloquear día</h3>
+      <div class="mb-3">
+        <label for="date" class="form-label">Fecha</label>
+        <input id="date" type="date" class="form-control" formControlName="date" />
+        <div *ngIf="form.get('date')?.invalid && form.get('date')?.touched" class="text-danger">
+          La fecha es requerida
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="reason" class="form-label">Motivo</label>
+        <input id="reason" type="text" class="form-control" formControlName="reason" />
+        <div *ngIf="form.get('reason')?.invalid && form.get('reason')?.touched" class="text-danger">
+          El motivo es requerido
+        </div>
+      </div>
+      <button type="submit" class="btn btn-danger w-100" [disabled]="form.invalid || loading">
+        Guardar
+      </button>
+    </form>
+  </div>
+</div>

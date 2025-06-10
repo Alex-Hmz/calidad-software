@@ -1,26 +1,31 @@
 <nav *ngIf="authService.isLoggedIn()" [ngClass]="collapsed ? 'sidebar-collapsed' : 'sidebar-expanded'" class="bg-primary text-white d-flex flex-column p-3">
-    <a *ngIf="authService.hasRole('admin') || authService.hasRole('patient')" routerLink="/appointments/list" class="text-white mb-2">
-        <i class="pi pi-home me-2"></i>
-        <span *ngIf="!collapsed">Home</span>
+    <a *ngIf="authService.hasRole('admin') || authService.hasRole('patient') || authService.hasRole('doctor')" routerLink="/appointment/list" class="text-white mb-2">
+        <i class="pi pi-calendar me-2"></i>
+        <span *ngIf="!collapsed">Citas</span>
     </a>
     <a *ngIf="authService.hasRole('admin')" routerLink="/users/list" class="text-white mb-2">
         <i class="pi pi-users me-2"></i>
-        <span *ngIf="!collapsed">Users</span>
+        <span *ngIf="!collapsed">Usuarios</span>
     </a>
     <a *ngIf="authService.hasRole('admin') || authService.hasRole('doctor')" routerLink="/patients" class="text-white mb-2">
         <i class="pi pi-user me-2"></i>
-        <span *ngIf="!collapsed">Patients</span>
+        <span *ngIf="!collapsed">Pacientes</span>
     </a>
     <a *ngIf="authService.hasRole('admin') || authService.hasRole('patient')" routerLink="/profile" class="text-white mb-2">
-        <i class="pi pi-user me-2"></i>
-        <span *ngIf="!collapsed">Profile</span>
+        <i class="pi pi-user-edit me-2"></i>
+        <span *ngIf="!collapsed">Perfil</span>
+    </a>
+    <!-- Only for patients: show link to their own medical record -->
+    <a *ngIf="authService.hasRole('patient')" [routerLink]="['/medical-record', authService.getCurrentUserId()]" class="text-white mb-2">
+        <i class="pi pi-id-card me-2"></i>
+        <span *ngIf="!collapsed">Expediente</span>
     </a>
     <a routerLink="/settings" class="text-white mb-2">
         <i class="pi pi-cog me-2"></i>
-        <span *ngIf="!collapsed">Settings</span>
+        <span *ngIf="!collapsed">Configuración</span>
     </a>
     <a (click)="logOut()" class="text-white mt-auto">
         <i class="pi pi-sign-out me-2"></i>
-        <span *ngIf="!collapsed">Logout</span>
+        <span *ngIf="!collapsed">Salir</span>
     </a>
 </nav>
