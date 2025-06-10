@@ -1,0 +1,104 @@
+<div class="container py-4">
+  <div class="card shadow-sm p-4 mx-auto" style="max-width: 800px;">
+    <h2 class="mb-4 text-center text-primary">
+      <i class="pi pi-id-card me-2"></i>Expediente Médico
+    </h2>
+
+    <p-progressSpinner *ngIf="loading" styleClass="d-block mx-auto my-5"></p-progressSpinner>
+
+    <div *ngIf="patientInfo" class="mb-4">
+      <h4 class="mb-3 text-success"><i class="pi pi-user me-2"></i>Información del paciente</h4>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <p><i class="pi pi-user"></i> <strong>Nombre:</strong> {{ patientInfo.name }}</p>
+          <p><i class="pi pi-envelope"></i> <strong>Email:</strong> {{ patientInfo.email }}</p>
+          <p><i class="pi pi-calendar"></i> <strong>Fecha de nacimiento:</strong> {{ patientInfo.birthdate | date }}</p>
+        </div>
+        <div class="col-md-6 mb-2">
+          <p><i class="pi pi-phone"></i> <strong>Teléfono:</strong> {{ patientInfo.phone }}</p>
+          <p><i class="pi pi-home"></i> <strong>Dirección:</strong> {{ patientInfo.address }}</p>
+        </div>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="mt-4">
+      <h4 class="mb-3 text-info"><i class="pi pi-bookmark me-2"></i>Seguimientos</h4>
+      <p-timeline *ngIf="traces.length > 0" [value]="traces" align="alternate" styleClass="custom-timeline">
+        <ng-template pTemplate="content" let-trace>
+          <div class="p-2">
+            <span class="fw-bold">{{ trace.traceName }}</span>
+            <div class="text-muted small">{{ trace.traceNotes }}</div>
+          </div>
+        </ng-template>
+      </p-timeline>
+      <ng-template [ngIf]="traces.length === 0">
+        <p class="text-muted">No hay seguimientos registrados.</p>
+      </ng-template>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="mt-4">
+      <h4 class="mb-3 text-warning"><i class="pi pi-calendar-clock me-2"></i>Citas</h4>
+      <p-table *ngIf="appointments.length > 0" [value]="appointments" responsiveLayout="scroll" class="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cita>
+          <tr>
+            <td>{{ cita.date }}</td>
+            <td>{{ cita.time }}</td>
+            <td>{{ cita.reason }}</td>
+            <td>
+              <p-tag [value]="cita.estado"
+                [severity]="
+                  cita.estado === 'Pendiente' ? 'warning' :
+                  cita.estado === 'Cancelada' ? 'danger' :
+                  cita.estado === 'No asistió' ? 'secondary' :
+                  cita.estado === 'Realizada' ? 'success' : 'info'
+                ">
+              </p-tag>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <ng-template [ngIf]="appointments.length === 0">
+        <p class="text-muted">No hay citas registradas.</p>
+      </ng-template>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="mt-4">
+      <h4 class="mb-3 text-danger"><i class="pi pi-heart me-2"></i>Tratamientos</h4>
+      <p-table *ngIf="treatments.length > 0" [value]="treatments" responsiveLayout="scroll" class="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Duración (días)</th>
+            <th>Fecha</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-t>
+          <tr>
+            <td>{{ t.treatmentName }}</td>
+            <td>{{ t.treatmentDescription }}</td>
+            <td>{{ t.treatmentDuration }}</td>
+            <td>{{ t.createdAt | date:'shortDate' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <ng-template [ngIf]="treatments.length === 0">
+        <p class="text-muted">No hay tratamientos registrados.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

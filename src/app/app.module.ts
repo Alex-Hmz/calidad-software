@@ -8,21 +8,13 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
-import { ReactiveFormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { FooterComponent } from './shared/components/footer/footer.component';
-import { DatePickerModule } from 'primeng/datepicker';
-import { CheckboxModule } from 'primeng/checkbox';
-import { HomeComponent } from './home/home.component';
-import { HeaderComponent } from './shared/components/header/header.component';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
 import { HeaderModule } from './shared/components/header/header.module';
 import { FooterModule } from './shared/components/footer/footer.module';
 import { SidebarModule } from './shared/components/sidebar/sidebar.module';
+import { MedicalRecordComponent } from './medical-record/features/medical-record/medical-record.component';
 
 @NgModule({
   declarations: [

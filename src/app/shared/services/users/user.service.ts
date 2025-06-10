@@ -1,6 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { collection, CollectionReference, doc, Firestore, getDoc, getDocs, query, where } from '@angular/fire/firestore';
-import { DoctorProfile } from '../../models/users';
+import { DoctorProfile, PatientProfile } from '../../models/users';
 import { UserRoleEnum } from '../../models/enums';
 import { Specialty } from '../../models/specialty';
 
@@ -15,7 +15,7 @@ interface userState{
 })
 export class UserService {
 
-    private usersRef: CollectionReference;
+  private usersRef: CollectionReference;
   
 
   constructor(private firestore: Firestore) {
@@ -34,68 +34,76 @@ export class UserService {
 
   async getUsers(): Promise<Boolean> {
     this._state.update((state) => ({
-    ...state,
-    loading: true,
-    error: false
-  }));
-  try{
-    
-    const q = query(
-    this.usersRef,
-    where('role', '==', UserRoleEnum.doctor),
-    );
-    const snapshot = await getDocs(q);
-    const users = snapshot.docs
-    .map(doc => ({ id: doc.id, ...doc.data() } as DoctorProfile))
-    .filter(user => user.isActive === true);
-
-    const specialtySnapshot = await getDocs(collection(this.firestore, 'specialties'));
-    const specialtiesMap = new Map<string, string>();
-    specialtySnapshot.forEach(doc => {
-      const data = doc.data() as Specialty;
-      specialtiesMap.set(doc.id, data.name);
-    });
-
-    const doctorsWithSpecialtyName = users.map(doc => ({
-    ...doc,
-    specialtyName: specialtiesMap.get(doc.specialty) || 'Sin especialidad'
+      ...state,
+      loading: true,
+      error: false
     }));
+    try{
+      
+      const q = query(
+      this.usersRef,
+      where('role', '==', UserRoleEnum.doctor),
+      );
+      const snapshot = await getDocs(q);
+      const users = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() } as DoctorProfile))
+      .filter(user => user.isActive === true);
 
-    if(users){
-      this._state.update((state) => ({
-        ...state,
-        users: doctorsWithSpecialtyName,
-        loading: false,
-        error: false
+      const specialtySnapshot = await getDocs(collection(this.firestore, 'specialties'));
+      const specialtiesMap = new Map<string, string>();
+      specialtySnapshot.forEach(doc => {
+        const data = doc.data() as Specialty;
+        specialtiesMap.set(doc.id, data.name);
+      });
+
+      const doctorsWithSpecialtyName = users.map(doc => ({
+      ...doc,
+      specialtyName: specialtiesMap.get(doc.specialty) || 'Sin especialidad'
       }));
 
+      if(users){
+        this._state.update((state) => ({
+          ...state,
+          users: doctorsWithSpecialtyName,
+          loading: false,
+          error: false
+        }));
+
+      }
+      
+      return true;
+
+    }catch (error) {
+      this._state.update((state) => ({
+          ...state,
+          error: true
+      }));
+
+      return false;
+
+    }finally {
+      this._state.update((state) => ({
+          ...state,
+          loading: false
+      }));
     }
-    
-    return true;
-
-  }catch (error) {
-    this._state.update((state) => ({
-        ...state,
-        error: true
-    }));
-
-    return false;
-
-  }finally {
-    this._state.update((state) => ({
-        ...state,
-        loading: false
-    }));
-  }
   }
 
-  async getUser(id: string): Promise<DoctorProfile | undefined> {
+  async getUser(id: string, role:UserRoleEnum ): Promise<DoctorProfile | PatientProfile | undefined> {
     
     const docRef = doc(this.firestore, 'users', id);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() } as DoctorProfile;
+
+      switch(role){
+        case UserRoleEnum.doctor :
+          return { id: docSnap.id, ...docSnap.data() } as DoctorProfile;
+        case UserRoleEnum.patient:
+          return { id: docSnap.id, ...docSnap.data() } as PatientProfile
+
+        default: return undefined
+      }
     } else {
       return undefined;
     }
@@ -109,7 +117,11 @@ export class UserService {
 
     console.log(specialty);
     console.log(time);
-    
+
+    this._state().users.forEach((doc) =>{
+      console.log(doc.specialty);
+      
+    })
     const doctors = this._state().users.filter(user => 
       user.role === UserRoleEnum.doctor 
       &&

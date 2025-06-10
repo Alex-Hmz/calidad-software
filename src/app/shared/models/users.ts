@@ -32,7 +32,7 @@ export interface DoctorProfile extends UserProfile {
         end: string; // HH:mm
     };
     role: UserRoleEnum.doctor;
-    sFirstLogin:boolean;
+    isFirstLogin:boolean;
 }
 
 export interface UpdateDoctor extends UserProfile{
@@ -48,3 +48,7 @@ export interface UpdateDoctor extends UserProfile{
 
 }
 
+export interface PatientProfile extends UserProfile{
+    id: string;
+    role:UserRoleEnum.patient
+}

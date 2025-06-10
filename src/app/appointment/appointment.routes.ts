@@ -10,6 +10,10 @@ export default [
         loadChildren: () => import('./features/create-appointment/create-appointment.module').then(m => m.CreateAppointmentModule)
     },
     {
+        path: 'edit/:id',
+        loadChildren: () => import('./features/create-appointment/create-appointment.module').then(m => m.CreateAppointmentModule)
+    },
+    {
         path: '',
         redirectTo: 'list',
         pathMatch: 'full'

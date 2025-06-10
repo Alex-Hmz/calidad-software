@@ -252,7 +252,7 @@ export class DoctorDesigService {
     }
   }
 
-  async isDoctorAvailableToAppointment(assignAppoint: CreateAsignDoctorToAppointment ): Promise<{isAvailability: boolean, id: string}> {
+  async isDoctorAvailableToAppointment(assignAppoint: CreateAsignDoctorToAppointment ): Promise<{doctor:DoctorProfile | null}> {
     try {
       const possibleDoctors = await this.userService.getDoctorsBySpecialtyAndAvaility(
         assignAppoint.typeId,
@@ -262,10 +262,20 @@ export class DoctorDesigService {
       console.log(`possibleDoctors: ${possibleDoctors}`);
       
       if (!possibleDoctors || possibleDoctors.length === 0) {
-        return { isAvailability: false, id: '' };
+        return { doctor:null };
       }
 
       for (const doctor of possibleDoctors) {
+
+        const isAvailable = await this.appointmentService.getIsDoctorAvailableToAppointment(
+          doctor.id,
+          assignAppoint.date,
+          assignAppoint.time
+        );
+        if (!isAvailable) {
+          continue; // Skip to the next doctor if this one is not available
+        }
+
         const appointmentCount = await this.appointmentService.getTotalAppointmentsByDoctorAndDate(
           doctor.id,
           assignAppoint.date
@@ -273,15 +283,15 @@ export class DoctorDesigService {
 
         if (appointmentCount < doctor.dailyAppointments) {
           alert('Doctor asignado a la cita exitosamente: ' + doctor.name);
-          return { isAvailability: true, id: doctor.id };
+          return { doctor };
         }
       }
       alert('Todos los doctores disponibles ya tienen sus citas completas para el día seleccionado.');
-      return { isAvailability: false, id: '' };
+      return { doctor:null };
 
     } catch (error) {
       alert('Error al asignar doctor a la cita: ' + error);
-      return { isAvailability: false, id: '' };
+      return { doctor:null };
     }
   }
 }

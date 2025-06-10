@@ -22,19 +22,32 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.routes').then(m => m.default),
-    data: { roles: ['admin', 'patient'] },
+    // data: { roles: ['admin', 'patient'] },
     canActivate: [publicGuard], 
   },
     {
     path: 'users',
     loadChildren: () => import('./user/users.routes').then(m => m.default),
+    data: { roles: ['admin'] },
     canActivate: [privateGuard], 
   },
 
   {
     path: 'appointment',
     loadChildren: () => import('./appointment/appointment.routes').then(m => m.default),
-    data: { roles: ['admin', 'patient'] },
+    data: { roles: ['admin', 'patient', 'doctor'] },
+    canActivate: [privateGuard], 
+  },
+  {
+    path: 'medical-record',
+    loadChildren: () => import('./medical-record/medical-record.routes').then(m => m.default),
+    data: { roles: ['admin', 'patient', 'doctor'] },
+    canActivate: [privateGuard], 
+  },
+  {
+    path: 'treatments',
+    loadChildren: () => import('./treatments/treatments.routes').then(m => m.default),
+    data: { roles: ['admin', 'patient', 'doctor'] },
     canActivate: [privateGuard], 
   },
   {

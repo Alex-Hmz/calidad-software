@@ -3,13 +3,17 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { AppointmentService } from '../../../shared/services/appointments/appointment.service';
 import { Auth, user } from '@angular/fire/auth';
 import { CreateAppointment, CreateAsignDoctorToAppointment } from '../../models/appointment';
-import { Router } from '@angular/router';
-import { AppointmentStatusEnum } from '../../../shared/models/enums';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppointmentStatusEnum, UserRoleEnum } from '../../../shared/models/enums';
 import { AppointmentTypeService } from '../../../shared/services/appointment-type-data-access/appointment-type.service';
 import { CreateTrace, Trace } from '../../../shared/models/appointment-trace';
 import { AppointmentTraceService } from '../../../shared/services/appointment-trace/appointment-trace.service';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { DoctorDesigService } from '../../../shared/services/doctor-desig/doctor-desig.service';
+import { NotificationService } from '../../../shared/services/notification/notification.service';
+import { AppointmentEmailParams } from '../../../shared/models/notifications';
+import { UserService } from '../../../shared/services/users/user.service';
+import { DoctorProfile, PatientProfile } from '../../../shared/models/users';
 
 @Component({
   selector: 'app-create-appointment',
@@ -17,12 +21,24 @@ import { DoctorDesigService } from '../../../shared/services/doctor-desig/doctor
   templateUrl: './create-appointment.component.html',
   styleUrl: './create-appointment.component.scss'
 })
-export class CreateAppointmentComponent {
+export class CreateAppointmentComponent implements OnInit {
   form: FormGroup;
   minDate: Date = new Date();
   availableTimes:{label:string, value:string}[] = [];
   tracings: Trace[] = [];
-
+  id: string | null = null;
+  editionMode = false;
+  patientInfo:PatientProfile = {
+    id: '',
+    role: UserRoleEnum.patient,
+    name: '',
+    email: '',
+    birthdate: new Date(),
+    phone: '',
+    address: '',
+    createdAt: new Date()
+  };
+  appointmentId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -32,7 +48,11 @@ export class CreateAppointmentComponent {
     public appointmentTypeService: AppointmentTypeService,
     public appointmentTraceService: AppointmentTraceService,
     private authService: AuthService,
-    private doctorDesigService: DoctorDesigService
+    private doctorDesigService: DoctorDesigService,
+    private notificationService:NotificationService,
+    private route: ActivatedRoute,
+    private userService: UserService
+
   ) {
     this.form = this.fb.group({
       date: ['', Validators.required],
@@ -45,12 +65,6 @@ export class CreateAppointmentComponent {
       isNewTrace: [false],
       traceName: [''], // título u objetivo general
       traceNotes: ['']
-    });
-
-    this.form.get('typeId')?.valueChanges.subscribe((isTraced: boolean) => {
-      const id = this.form.get('typeId')?.value;
-console.log(id);
-      
     });
 
     this.form.get('isTraced')?.valueChanges.subscribe((isTraced: boolean) => {
@@ -93,17 +107,37 @@ console.log(id);
   }
 
   async ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get('id') ?? null;
+    this.editionMode = !!this.id;
 
-    if(this.authService.getCurrentUserId()){
-      const result = await this.appointmentTraceService.getAllByUser(this.authService.getCurrentUserId()! )
+    // If editing, fetch appointment by id and patch form
+    if (this.editionMode && this.id) {
+      const appointment = await this.appointmentService.getAppointmentById(this.id);
+      if (appointment) {
+        this.form.patchValue({
+          date: appointment.date,
+          time: appointment.time,
+          typeId: appointment.typeId,
+          reason: appointment.reason,
+          // patch other fields as needed
+        });
+      }
     }
 
+    this.userService.getUser(this.id!, UserRoleEnum.patient)
+      .then((usuario: DoctorProfile | PatientProfile | undefined) => {
+        if (usuario && (usuario as PatientProfile)) {
+          this.patientInfo = usuario as PatientProfile;
+        }
+        console.log(this.patientInfo);
+      });
+
+    const result = await this.appointmentTraceService.getAllByUser(this.id!);
+
     this.setAvailableTimes(new Date());
-    // Subscribe to date changes
     this.form.get('date')?.valueChanges.subscribe((selectedDate: Date | string) => {
       this.setAvailableTimes(selectedDate);
     });
-
   }
 
   async submit() {
@@ -122,7 +156,7 @@ console.log(id);
 
 
     const appointment: CreateAppointment = {
-      userId: this.authService.getCurrentUserId()!,
+      userId: this.id!,
       estado: AppointmentStatusEnum.Pendiente,
       date: formattedDate,
       time,
@@ -132,7 +166,7 @@ console.log(id);
     };
 
     const newTrace: CreateTrace = {
-      userId: this.authService.getCurrentUserId()!,
+      userId: this.id!,
       traceName: this.form.value.traceName ?? null,
       traceNotes: this.form.value.traceNotes ?? null,
       isValid: true
@@ -147,6 +181,8 @@ console.log(id);
 
       const specialtyIdOfType = this.appointmentTypeService.getSpecialtyIdByAppointmentTypeId(appointment.typeId);
 
+      console.log(`specialtyIdOfType: ${specialtyIdOfType}`);
+      
       const assignDoctor: CreateAsignDoctorToAppointment = {
         userId: appointment.userId,
         typeId: specialtyIdOfType!,
@@ -154,16 +190,38 @@ console.log(id);
         time: appointment.time
       }
 
-      const doctorAvailability = await this.doctorDesigService.isDoctorAvailableToAppointment(assignDoctor);
-      if(doctorAvailability.isAvailability){
+      const doctorAvailable = await this.doctorDesigService.isDoctorAvailableToAppointment(assignDoctor);
+      if(doctorAvailable !== null){
         const appointmentId = await this.appointmentService.createAppointment(appointment);
-        const result = await this.appointmentService.asignDoctorToAppointment(appointmentId, doctorAvailability.id)
+        const result = await this.appointmentService.asignDoctorToAppointment(appointmentId, doctorAvailable.doctor!.id)
 
         if(this.form.value.isNewTrace){
         
           appointment.traceId = await this.appointmentTraceService.create(newTrace);
           
         }
+
+
+
+        // Notificación Médico y usuario
+
+      const email: AppointmentEmailParams = {
+        to_name: this.patientInfo.name,
+        to_email: this.patientInfo.email,
+        to_cc: doctorAvailable.doctor?.email!,
+        from_name: doctorAvailable.doctor?.name!,
+        cita_fecha: appointment.date,
+        cita_hora: appointment.time,
+        accion: AppointmentStatusEnum.Pendiente,
+        rol_actor: 'doctor',
+        rol_receptor: 'paciente',
+        razon_cancelacion: null,
+        // to_cc: doctorAvailable.doctor?.email!,
+        title: 'Pendiente de aceptación'
+      }
+
+
+      this.notificationService.send(email)
       alert('Cita agendada exitosamente');
 
       }else{
@@ -195,7 +253,7 @@ console.log(id);
 
     
       try{
-        bookedHours = await this.appointmentService.getBookedHoursByUser(base.toISOString().split('T')[0], this.authService.getCurrentUserId()!);
+        bookedHours = await this.appointmentService.getBookedHoursByUser(base.toISOString().split('T')[0], this.id!);
         const today = new Date();
         const isToday =
         base.getFullYear() === today.getFullYear() &&

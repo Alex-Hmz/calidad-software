@@ -5,6 +5,7 @@ import { AppointmentsRoutingModule } from './appointments-routing.module';
 import { ButtonModule } from 'primeng/button';
 import { Tag } from 'primeng/tag';
 import { DataViewModule } from 'primeng/dataview';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { DataViewModule } from 'primeng/dataview';
     ButtonModule,
     DataViewModule,
     Tag,
+    DialogModule,
   ],
   exports: [
     AppointmentsComponent

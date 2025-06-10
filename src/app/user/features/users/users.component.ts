@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../../../shared/services/users/user.service';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { Auth } from '@angular/fire/auth';
+import { UserRoleEnum } from '../../../shared/models/enums';
 
 @Component({
   selector: 'app-users',
@@ -39,7 +40,7 @@ export class UsersComponent {
 
   async delete(id:string) {
     // Implementar lógica de eliminación de cita
-    const doctor = await this.userService.getUser(id);
+    const doctor = await this.userService.getUser(id, UserRoleEnum.doctor);
 
     if (doctor != undefined) {
 

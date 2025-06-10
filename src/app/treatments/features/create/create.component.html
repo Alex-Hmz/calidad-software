@@ -1,0 +1,34 @@
+<div class="container py-5">
+  <div class="card p-3 shadow-sm mx-auto" style="max-width: 600px;">
+    <div class="d-flex mb-3 justify-content-between align-items-center">
+      <button type="button" class="btn btn-outline-primary" (click)="goBack()">
+        <i class="pi pi-arrow-left me-2"></i>Volver a tratamientos
+      </button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <h2 class="text-center fw-bold mb-3">Crear tratamiento</h2>
+      <div class="mb-3">
+        <label for="treatmentName" class="form-label">Nombre del tratamiento</label>
+        <input id="treatmentName" type="text" class="form-control" formControlName="treatmentName" placeholder="Ej: Antibiótico" />
+        <div *ngIf="form.get('treatmentName')?.invalid && form.get('treatmentName')?.touched" class="text-danger">
+          El nombre es requerido
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="treatmentDescription" class="form-label">Descripción</label>
+        <textarea id="treatmentDescription" class="form-control" formControlName="treatmentDescription" rows="3" placeholder="Describe el tratamiento"></textarea>
+        <div *ngIf="form.get('treatmentDescription')?.invalid && form.get('treatmentDescription')?.touched" class="text-danger">
+          La descripción es requerida
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="treatmentDuration" class="form-label">Duración (días)</label>
+        <input id="treatmentDuration" type="number" class="form-control" formControlName="treatmentDuration" min="1" />
+        <div *ngIf="form.get('treatmentDuration')?.invalid && form.get('treatmentDuration')?.touched" class="text-danger">
+          La duración debe ser al menos 1 día
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success w-100 fw-bold" [disabled]="form.invalid">Guardar tratamiento</button>
+    </form>
+  </div>
+</div>

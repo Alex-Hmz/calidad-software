@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../shared/services/users/user.service';
-import { CreateDoctorProfile, DoctorProfile } from '../../../shared/models/users';
+import { CreateDoctorProfile, DoctorProfile, PatientProfile } from '../../../shared/models/users';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { UserRoleEnum } from '../../../shared/models/enums';
 
@@ -15,7 +15,7 @@ import { UserRoleEnum } from '../../../shared/models/enums';
 export class UserFormComponent {
  form: FormGroup;
   id: string | null = null;
-  modoEdicion = false;
+  editionMode = false;
   today: Date = new Date(); // Para el calendario de fecha de nacimiento
   error = '';
   success = '';
@@ -58,23 +58,25 @@ export class UserFormComponent {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') ?? null;
-    this.modoEdicion = !!this.id;
+    this.editionMode = !!this.id;
     this.setAvailableTimes();
 
-    if (this.modoEdicion) {
-      this.userService.getUser(this.id!)
-        .then((usuario) => {
-          if (usuario) {
+    if (this.editionMode) {
+      this.userService.getUser(this.id!, UserRoleEnum.doctor)
+        .then((usuario: DoctorProfile | PatientProfile | undefined) => {
+
+          if (usuario && (usuario as DoctorProfile).specialty !== undefined) {
+            const doctor = usuario as DoctorProfile;
             this.form.patchValue({
-              name: usuario.name,
-              email: usuario.email,
-              birthdate: usuario.birthdate,
-              phone: usuario.phone,
-              address: usuario.address,
-              specialty: usuario.specialty,
-              startTime: usuario.schechule?.start,
-              endTime: usuario.schechule?.end,
-              dailyAppointments: usuario.dailyAppointments,
+              name: doctor.name,
+              email: doctor.email,
+              birthdate: doctor.birthdate,
+              phone: doctor.phone,
+              address: doctor.address,
+              specialty: doctor.specialty,
+              startTime: doctor.schechule?.start,
+              endTime: doctor.schechule?.end,
+              dailyAppointments: doctor.dailyAppointments,
             });
           } else {
             console.error('Usuario no encontrado');
@@ -142,7 +144,7 @@ export class UserFormComponent {
 
 
 
-    // if (this.modoEdicion) {
+    // if (this.editionMode) {
     //   this.userService.actualizarUsuario(this.idUsuario!, data).subscribe(() => {
     //     this.router.navigate(['/usuarios']);
     //   });

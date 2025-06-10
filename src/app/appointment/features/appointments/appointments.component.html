@@ -17,7 +17,7 @@
                   <td colspan="4" class="px-6 py-4 text-center text-gray-500">
                       Loading...
                   </td>
-              </tr>
+              </tr> 
         }
         
         @if(!appointmentService.loading() && !appointmentService.error()){
@@ -30,7 +30,18 @@
                       <div><strong>Hora:</strong> {{ cita.time }}</div>
                       <div><strong>Motivo:</strong> {{ cita.reason }}</div>
                       <p-tag [value]="cita.estado" severity="info"></p-tag>
-                      <div><p-button icon="pi pi-trash" aria-label="Delete" (onClick)="delete(cita.id)"/></div>
+                      @if(authService.getCurrentRole() === 'doctor' || authService.getCurrentRole() === 'admin'){
+                        <div>
+                          <p-button icon="pi pi-pencil" aria-label="Confirm" (onClick)="createTreatment(cita.id, cita.userId)" [disabled]="cita.estado === 'Confirmada'"/>
+                        </div>
+                        <div>
+                          <button pButton type="button" icon="pi pi-user" class="p-button-info" [routerLink]="['/medical-record', cita.userId]" label="Ver expediente"></button>
+                        </div>
+                      }
+
+                      <div><p-button icon="pi pi-trash" aria-label="Delete" (onClick)="delete(cita)"/></div>
+
+                      
                     </div>
                   </div>
                 </div>
@@ -58,6 +69,59 @@
         <div class="card-body">
           <p class="text-muted">No tienes citas próximas.</p>
         </div>
+      </ng-template>
+    </div>
+
+    <!-- Citas programadas -->
+    <div class="card mb-5 shadow-sm">
+      <div class="card-header" style="background-color: var(--bs-warning); color: var(--bs-dark, #212529);">
+      <h5 class="mb-0">Citas Programadas</h5>
+      </div>
+      <div class="card-body" *ngIf="appointmentService.future_appointments().length > 0; else noCitas">
+        @if(appointmentService.loading()){
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+              Loading...
+            </td>
+          </tr> 
+      }
+      
+      @if(!appointmentService.loading() && !appointmentService.error()){
+        <p-dataview [value]="appointmentService.future_appointments()">
+          <ng-template let-items #list>
+          <div class="row">
+            <div class="col-12 mb-3" *ngFor="let cita of items">
+            <div class="d-flex justify-content-around align-items-center p-3 border rounded shadow-sm">
+              <div><strong>Fecha:</strong> {{ cita.date }}</div>
+              <div><strong>Hora:</strong> {{ cita.time }}</div>
+              <div><strong>Motivo:</strong> {{ cita.reason }}</div>
+              <p-tag [value]="cita.estado" severity="info"></p-tag>
+              @if(authService.getCurrentRole() === 'doctor' || authService.getCurrentRole() === 'admin'){
+              <div>
+                <p-button icon="pi pi-verified" aria-label="Confirm" (onClick)="confirm(cita)" [disabled]="cita.estado === 'Confirmada'"/>
+              </div>
+              <div>
+                <button pButton type="button" icon="pi pi-user" class="p-button-info" [routerLink]="['/medical-record', cita.userId]" label="Ver expediente"></button>
+              </div>
+              }
+              <!-- Edit button for admin and patient -->
+              @if(authService.getCurrentRole() === 'admin' || authService.getCurrentRole() === 'patient'){
+                <div>
+                  <p-button icon="pi pi-file-edit" aria-label="Edit" (onClick)="editAppointment(cita.id)" />
+                </div>
+              }
+              <div><p-button icon="pi pi-trash" aria-label="Delete" (onClick)="delete(cita)"/></div>
+            </div>
+            </div>
+          </div>
+          </ng-template>
+        </p-dataview>
+      }
+      </div>
+      <ng-template #noCitas>
+      <div class="card-body">
+        <p class="text-muted">No tienes citas próximas.</p>
+      </div>
       </ng-template>
     </div>
   
