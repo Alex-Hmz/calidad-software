@@ -14,6 +14,7 @@ import { NotificationService } from '../../../shared/services/notification/notif
 import { AppointmentEmailParams } from '../../../shared/models/notifications';
 import { UserService } from '../../../shared/services/users/user.service';
 import { DoctorProfile, PatientProfile } from '../../../shared/models/users';
+import { AdminPanelService, FreeDay } from '../../../shared/services/date-config/admin-panel.service';
 
 @Component({
   selector: 'app-create-appointment',
@@ -39,6 +40,7 @@ export class CreateAppointmentComponent implements OnInit {
     createdAt: new Date()
   };
   appointmentId: string | null = null;
+  blockedDates: Date[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +53,8 @@ export class CreateAppointmentComponent implements OnInit {
     private doctorDesigService: DoctorDesigService,
     private notificationService:NotificationService,
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private adminPanelService: AdminPanelService
 
   ) {
     this.form = this.fb.group({
@@ -116,8 +119,11 @@ export class CreateAppointmentComponent implements OnInit {
       
       const appointment = await this.appointmentService.getAppointmentById(this.id);
       if (appointment) {
+
+        console.log(" appointment.date: ", appointment.date);
+        
         this.form.patchValue({
-          date: appointment.date,
+          date: new Date(appointment.date),
           time: appointment.time,
           typeId: appointment.typeId,
           reason: appointment.reason,
@@ -125,6 +131,9 @@ export class CreateAppointmentComponent implements OnInit {
         });
       }
 
+    }else{
+      this.id = this.authService.getCurrentUserId();
+    }
 
     this.userService.getUser(this.id!, UserRoleEnum.patient)
       .then((usuario: DoctorProfile | PatientProfile | undefined) => {
@@ -134,9 +143,8 @@ export class CreateAppointmentComponent implements OnInit {
         console.log(this.patientInfo);
       });
 
-    const result = await this.appointmentTraceService.getAllByUser(this.id!);
 
-    }
+    const result = await this.appointmentTraceService.getAllByUser(this.id!);
 
 
 
@@ -144,6 +152,11 @@ export class CreateAppointmentComponent implements OnInit {
     this.form.get('date')?.valueChanges.subscribe((selectedDate: Date | string) => {
       this.setAvailableTimes(selectedDate);
     });
+
+    // Fetch blocked days for the current year
+    const year = new Date().getFullYear();
+    const freeDays = await this.adminPanelService.getFreeDaysByYear(year);
+    this.blockedDates = freeDays.map(fd => new Date(fd.date));
   }
 
   async submit() {
@@ -171,24 +184,18 @@ export class CreateAppointmentComponent implements OnInit {
       createdAt: Date.now()
     };
 
-    const newTrace: CreateTrace = {
-      userId: this.id!,
-      traceName: this.form.value.traceName ?? null,
-      traceNotes: this.form.value.traceNotes ?? null,
-      isValid: true
-    }
+
 
 
     try {
 
       if(this.form.value.isTraced){
+        
         appointment.traceId = this.form.value.traceId;
       }
 
       const specialtyIdOfType = this.appointmentTypeService.getSpecialtyIdByAppointmentTypeId(appointment.typeId);
 
-      console.log(`specialtyIdOfType: ${specialtyIdOfType}`);
-      
       const assignDoctor: CreateAsignDoctorToAppointment = {
         userId: appointment.userId,
         typeId: specialtyIdOfType!,
@@ -198,14 +205,21 @@ export class CreateAppointmentComponent implements OnInit {
 
       const doctorAvailable = await this.doctorDesigService.isDoctorAvailableToAppointment(assignDoctor);
       if(doctorAvailable !== null){
-        const appointmentId = await this.appointmentService.createAppointment(appointment);
-        const result = await this.appointmentService.asignDoctorToAppointment(appointmentId, doctorAvailable.doctor!.id)
-
         if(this.form.value.isNewTrace){
-        
+          const newTrace: CreateTrace = {
+            userId: this.id!,
+            traceName: this.form.value.traceName ?? null,
+            traceNotes: this.form.value.traceNotes ?? null,
+            createAt: new Date(),
+            isValid: true
+          }
           appointment.traceId = await this.appointmentTraceService.create(newTrace);
           
         }
+        const appointmentId = await this.appointmentService.createAppointment(appointment);
+        const result = await this.appointmentService.asignDoctorToAppointment(appointmentId, doctorAvailable.doctor!.id)
+
+
 
 
 
@@ -227,6 +241,8 @@ export class CreateAppointmentComponent implements OnInit {
       }
 
 
+      console.log('Email params:', email);
+      
       this.notificationService.send(email)
       alert('Cita agendada exitosamente');
 

@@ -1,8 +1,7 @@
-
 <div class="container ">
   <div class=" card p-4 shadow">
     <div class="d-flex  mb-3 justify-content-between align-items-center">
-      <button type="button" class="btn btn-primary w-20">
+      <button type="button" (click)="goBack()" class="btn btn-primary w-20">
           Volver a citas
       </button>
     </div>
@@ -59,16 +58,14 @@
             <!-- Fecha de nacimiento -->
             <div class="p-field mb-4">
               <label for="birthdate" class="d-block mb-2 fw-medium">Fecha de nacimiento</label>
-              <p-datePicker 
-                id="birthdate" 
+              <input
+                id="birthdate"
+                type="date"
+                class="form-control"
                 formControlName="birthdate"
-                [showIcon]="true"
-                [maxDate]="today"
-                dateFormat="dd/mm/yy"
+                [max]="today | date:'yyyy-MM-dd'"
                 placeholder="Selecciona tu fecha de nacimiento"
-                styleClass="w-100"
-                >
-              </p-datePicker>
+              />
               <small 
                 *ngIf="form.get('birthdate')?.invalid && form.get('birthdate')?.touched" 
                 class="p-error mt-1 d-block">
@@ -188,6 +185,9 @@
                 *ngIf="form.get('dailyAppointments')?.invalid && form.get('dailyAppointments')?.touched" 
                 class="p-error mt-1 d-block">
                 La cantidad de citas es requerido
+              </small>
+              <small *ngIf="form.errors?.['dailyAppointmentsExceed'] && form.get('dailyAppointments')?.touched" class="text-danger">
+                El número de citas diarias no puede ser mayor al número de horas seleccionadas.
               </small>
             </div>
 

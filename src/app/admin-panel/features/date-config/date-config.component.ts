@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AdminPanelService } from '../../data-access/admin-panel.service';
+import { AdminPanelService } from '../../../shared/services/date-config/admin-panel.service';
 
 @Component({
   selector: 'app-date-config',

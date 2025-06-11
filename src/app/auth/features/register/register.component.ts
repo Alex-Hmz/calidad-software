@@ -114,7 +114,7 @@ export class RegisterComponent implements OnInit {
       
       // Redirige al login después de un tiempo
       setTimeout(() => {
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/appointment/list']);
       }, 2000);
 
       // this.router.navigate(['/appointments']); // Redirige a la página de citas después del registro exitoso

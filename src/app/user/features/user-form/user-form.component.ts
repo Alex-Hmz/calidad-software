@@ -32,7 +32,7 @@ export class UserFormComponent {
     this.form = this.fb.group({
         name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      birthdate: ['', Validators.required],
+      birthdate: [new Date(), Validators.required],
       phone: ['', Validators.required],
       address: ['', Validators.required],
 
@@ -43,7 +43,7 @@ export class UserFormComponent {
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
 
-      dailyAppointments: ['', [Validators.required, Validators.min(1), Validators.max(9)]],
+      dailyAppointments: ['', [Validators.required, Validators.min(1)]],
 
       // Credenciales de acceso
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -52,8 +52,10 @@ export class UserFormComponent {
     { 
       validators: [
         this.horarioValidator,
-       this.passwordMatchValidator]
-     });
+        this.passwordMatchValidator,
+        this.dailyAppointmentsValidator // <-- add new validator here
+      ]
+    });
   }
 
   ngOnInit(): void {
@@ -94,7 +96,7 @@ export class UserFormComponent {
   }
 
   async submit(): Promise<void> {
-   const { 
+    const { 
       email, 
       password, 
       name, 
@@ -102,9 +104,22 @@ export class UserFormComponent {
       phone, 
       address, 
       specialty,
-      dailyAppointments
+      dailyAppointments,
+      startTime,
+      endTime
     } = this.form.value;
-    
+
+    // Extra validation: dailyAppointments <= available hours
+    if (startTime && endTime && dailyAppointments) {
+      const [startHour] = startTime.split(':').map(Number);
+      const [endHour] = endTime.split(':').map(Number);
+      const maxAppointments = endHour - startHour;
+      if (dailyAppointments > maxAppointments) {
+        this.error = 'El número de citas diarias no puede ser mayor al número de horas seleccionadas.';
+        return;
+      }
+    }
+
     try {
       const user = await this.authService.register(email, password, UserRoleEnum.doctor);
 
@@ -194,5 +209,29 @@ export class UserFormComponent {
     }
     
     return null;
+  }
+
+  dailyAppointmentsValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
+    const start = group.get('startTime')?.value;
+    const end = group.get('endTime')?.value;
+    const dailyAppointments = group.get('dailyAppointments')?.value;
+
+    if (!start || !end || !dailyAppointments) return null;
+
+    // Parse hours from "HH:mm"
+    const [startHour] = start.split(':').map(Number);
+    const [endHour] = end.split(':').map(Number);
+
+    const maxAppointments = endHour - startHour;
+    if (maxAppointments <= 0) return { rangoHorarioInvalido: true };
+
+    if (dailyAppointments > maxAppointments) {
+      return { dailyAppointmentsExceed: true };
+    }
+    return null;
+  };
+
+  goBack() {
+    this.router.navigate(['/appointment/list']);
   }
 }

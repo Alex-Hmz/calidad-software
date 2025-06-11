@@ -23,7 +23,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
     UserFormRoutingModule,
     InputTextModule,
     ButtonModule,
-    DatePickerModule,
     ProgressSpinnerModule,
     InputNumberModule
   ],

@@ -15,7 +15,7 @@ import { privateGuard, publicGuard } from './guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'auth',
     pathMatch: 'full'
 
   },
@@ -28,7 +28,7 @@ export const routes: Routes = [
     {
     path: 'users',
     loadChildren: () => import('./user/users.routes').then(m => m.default),
-    data: { roles: ['admin'] },
+    data: { roles: ['admin', 'doctor'] },
     canActivate: [privateGuard], 
   },
 

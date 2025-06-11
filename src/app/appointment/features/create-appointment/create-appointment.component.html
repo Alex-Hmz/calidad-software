@@ -23,12 +23,14 @@
                   <label for="date" class="d-block mb-2 fw-medium">Fecha</label>
                   <div class="input-group w-100">
                     <span class="input-group-text bg-light"><i class="pi pi-calendar"></i></span>
-                    <p-datepicker 
-                      id="date" 
-                      formControlName="date" 
-                      dateFormat="yy-mm-dd"  
-                      [readonlyInput]="true" 
-                      [minDate]="minDate" 
+                    <!-- Replace p-datepicker with native input type="date" -->
+                    <p-datepicker
+                      id="date"
+                      formControlName="date"
+                      dateFormat="yy-mm-dd"
+                      [readonlyInput]="true"
+                      [minDate]="minDate"
+                      [disabledDates]="blockedDates"
                       class="flex-grow-1">
                     </p-datepicker>
                   </div>

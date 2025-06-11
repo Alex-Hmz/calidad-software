@@ -2,9 +2,12 @@
     <h2 class="text-center mb-4">Bienvenido a tu Panel de Citas</h2>
   
     <!-- Botón para agendar nueva cita -->
-    <div class="text-end mb-4">
-      <button pButton label="Agendar nueva cita" icon="pi pi-plus" class="p-button-success" (click)="agendarCita()"></button>
-    </div>
+     @if(authService.hasRole('patient')){
+      <div class="text-end mb-4">
+        <button pButton label="Agendar nueva cita" icon="pi pi-plus" class="p-button-success" (click)="agendarCita()"></button>
+      </div>
+     }
+    
   
     <!-- Citas actuales -->
     <div class="card mb-5 shadow-sm">
@@ -104,12 +107,7 @@
                 <button pButton type="button" icon="pi pi-user" class="p-button-info" [routerLink]="['/medical-record', cita.userId]" label="Ver expediente"></button>
               </div>
               }
-              <!-- Edit button for admin and patient -->
-              @if(authService.getCurrentRole() === 'admin' || authService.getCurrentRole() === 'patient'){
-                <div>
-                  <p-button icon="pi pi-file-edit" aria-label="Edit" (onClick)="editAppointment(cita.id)" />
-                </div>
-              }
+
               <div><p-button icon="pi pi-trash" aria-label="Delete" (onClick)="delete(cita)"/></div>
             </div>
             </div>
