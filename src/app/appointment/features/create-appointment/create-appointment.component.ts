@@ -112,6 +112,8 @@ export class CreateAppointmentComponent implements OnInit {
 
     // If editing, fetch appointment by id and patch form
     if (this.editionMode && this.id) {
+      console.log("ex");
+      
       const appointment = await this.appointmentService.getAppointmentById(this.id);
       if (appointment) {
         this.form.patchValue({
@@ -122,7 +124,7 @@ export class CreateAppointmentComponent implements OnInit {
           // patch other fields as needed
         });
       }
-    }
+
 
     this.userService.getUser(this.id!, UserRoleEnum.patient)
       .then((usuario: DoctorProfile | PatientProfile | undefined) => {
@@ -133,6 +135,10 @@ export class CreateAppointmentComponent implements OnInit {
       });
 
     const result = await this.appointmentTraceService.getAllByUser(this.id!);
+
+    }
+
+
 
     this.setAvailableTimes(new Date());
     this.form.get('date')?.valueChanges.subscribe((selectedDate: Date | string) => {
