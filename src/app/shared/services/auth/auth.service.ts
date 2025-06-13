@@ -96,12 +96,6 @@ export class AuthService {
   async register(email: string, password: string, role:UserRoleEnum): Promise<User> {
     try {
       const result = await createUserWithEmailAndPassword(this.auth, email, password);
-
-      if(role === UserRoleEnum.doctor) {
-        signOut(this.auth)
-      }
-
-
       return result.user;
     } catch (error: any) {
       // Mejorar los mensajes de error

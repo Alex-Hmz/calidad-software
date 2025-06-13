@@ -61,7 +61,7 @@ export class UsersComponent {
 
   crearDoctor() {
     this.router.navigate(['users/create']); // redirige a formulario de nueva cita
-    }
+  }
 
 
 }

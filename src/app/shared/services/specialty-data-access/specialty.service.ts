@@ -19,6 +19,7 @@ export class SpecialtyService {
 
   constructor(private firestore: Firestore) {
     this.specialtiesRef = collection(this.firestore, 'specialties');
+    this.getAll(); // Fetch specialties on service initialization
   }
 
     private _state = signal<SpecialtyState>({
@@ -45,6 +46,7 @@ export class SpecialtyService {
         const q = query(this.specialtiesRef, where('isValid', '==', true));
         const snapshot = await getDocs(q);
         const specialties = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Specialty));
+        console.log('Fetched specialties:', specialties); // <-- Add this line
   
         const now = new Date();
   

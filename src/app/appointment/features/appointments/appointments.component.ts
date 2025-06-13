@@ -229,6 +229,8 @@ export class AppointmentsComponent {
         }
         const patient: PatientProfile = patientResult as PatientProfile;
 
+        console.log("patient: ", patient);
+        
         switch (this.user.role) {
           case UserRoleEnum.patient: {
             email = {

@@ -9,12 +9,12 @@
     </a>
     <a *ngIf="authService.hasRole('admin')" routerLink="/users/list" class="text-white mb-2">
         <i class="pi pi-users me-2"></i>
-        <span *ngIf="!collapsed">Usuarios</span>
+        <span *ngIf="!collapsed">Doctores</span>
     </a>
-    <a *ngIf="authService.hasRole('admin')" routerLink="/patients" class="text-white mb-2">
+    <!-- <a *ngIf="authService.hasRole('admin')" routerLink="/patients" class="text-white mb-2">
         <i class="pi pi-user me-2"></i>
         <span *ngIf="!collapsed">Pacientes</span>
-    </a>
+    </a> -->
     <!-- Only for patients: show link to their own medical record -->
     <a *ngIf="authService.hasRole('patient')" [routerLink]="['/medical-record', authService.getCurrentUserId()]" class="text-white mb-2">
         <i class="pi pi-id-card me-2"></i>

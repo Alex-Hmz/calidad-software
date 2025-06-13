@@ -10,6 +10,10 @@ export default [
         loadChildren: () => import('./features/register/register.module').then(m => m.RegisterModule)
     },
     {
+        path: 'register-doctor',
+        loadChildren: () => import('./features/doctor-register/doctor-register.module').then(m => m.DoctorRegisterModule)
+    },
+    {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full'

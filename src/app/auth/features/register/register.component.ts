@@ -134,4 +134,7 @@ export class RegisterComponent implements OnInit {
   goToLogin(): void {
     this.router.navigate(['/auth/login']);
   }
+  goToDoctorRegister(): void {
+    this.router.navigate(['/auth/register-doctor']);
+  }
 }

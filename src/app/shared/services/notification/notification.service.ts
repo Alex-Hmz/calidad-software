@@ -19,7 +19,10 @@ export class NotificationService {
   }
 
   send(appointmentEmailParams:AppointmentEmailParams) {
+
+    
     return this.sendEmail({
+      to_email: appointmentEmailParams.to_email,
       to_name: appointmentEmailParams.to_name,
       from_name: appointmentEmailParams.from_name,
       cita_fecha: appointmentEmailParams.cita_fecha,
