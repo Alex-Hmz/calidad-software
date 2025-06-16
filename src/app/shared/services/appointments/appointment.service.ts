@@ -3,6 +3,7 @@ import { Firestore, collection, addDoc, getDocs, query, where, CollectionReferen
 import { Auth } from '@angular/fire/auth';
 import { Appointment, CreateAppointment } from '../../../appointment/models/appointment';
 import { AppointmentStatusEnum, UserRoleEnum } from '../../models/enums';
+import Swal from 'sweetalert2';
 
 interface AppointmentState{
     future_appointments: Appointment[];
@@ -65,7 +66,6 @@ export class AppointmentService {
 
 
   async getAppointmentsByUser(userId: string, role: UserRoleEnum): Promise<Boolean> {
-
     this._state.update((state) => ({
         ...state,
         loading: true,
@@ -136,7 +136,11 @@ export class AppointmentService {
           ...state,
           error: true
       }));
-
+      Swal.fire({
+        title: "Error",
+        text: "Error al obtener citas: " + (error as any).message,
+        icon: "error"
+      });
       return false;
 
     }finally {
@@ -148,23 +152,36 @@ export class AppointmentService {
   }
 
   async getBookedHoursByUser(date: string, userId:string):Promise<string[]> {
-    const appointmentsRef = collection(this.firestore, 'appointments');
-    const q = query(
-      appointmentsRef,
-      where('date', '==', date)
-      , where('userId', '==', userId)
-    );
-
-    const snapshot = await getDocs(q);
-    const citas = snapshot.docs.map(doc => doc.data() as Appointment);
-    return citas.map(c => c.time); // ["09:00", "12:00", ...]
+    try {
+      const appointmentsRef = collection(this.firestore, 'appointments');
+      const q = query(
+        appointmentsRef,
+        where('date', '==', date)
+        , where('userId', '==', userId)
+      );
+      const snapshot = await getDocs(q);
+      const citas = snapshot.docs.map(doc => doc.data() as Appointment);
+      return citas.map(c => c.time); // ["09:00", "12:00", ...]
+    } catch (e) {
+      Swal.fire({
+        title: "Error",
+        text: "Error al obtener las horas disponibles: " + (e as any).message,
+        icon: "error"
+      });
+      return [];
+    }
   }
+
   async createAppointment(appointment: CreateAppointment) {
     try {
         const docRef = await addDoc(this.appointmentsRef, appointment);
         return docRef.id;
-
     } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: "Error al crear la cita: " + (error as any).message,
+        icon: "error"
+      });
       throw new Error((error as any).message);
     }
   }
@@ -172,9 +189,18 @@ export class AppointmentService {
   async updateAppointmentStatus(appointmentId: string, appointmentType:AppointmentStatusEnum): Promise<void> {
     const docRef = doc(this.firestore, 'appointments', appointmentId);
     try {
-      alert('Cita modificada exitosamente: ' + appointmentType);
+      Swal.fire({
+        title: "Cita modificada",
+        text: "Cita modificada exitosamente: " + appointmentType,
+        icon: "success"
+      });
       return await updateDoc(docRef, { estado: appointmentType });
     } catch (error) {
+      Swal.fire({
+        title: "Error",
+        text: "Error al actualizar el estado: " + (error as any).message,
+        icon: "error"
+      });
       throw new Error('Error al actualizar el estado: ' + (error as any).message);
     }
   }
@@ -190,7 +216,7 @@ export class AppointmentService {
     return await getDocs(q).then(snapshot => {
       return snapshot.docs.length;
     }).catch(error => {
-      console.error('Error al obtener citas:', error);
+
       throw new Error('Error al obtener citas: ' + (error as any).message);
     });
   }
@@ -204,10 +230,11 @@ export class AppointmentService {
       where('time', '==', time)
     );
 
-    return await getDocs(q).then(snapshot => {
+    return await getDocs(q)
+    .then(snapshot => {
       return snapshot.docs.length === 0; // Si no hay citas, el doctor está disponible
-    }).catch(error => {
-      console.error('Error al verificar disponibilidad del doctor:', error);
+    })
+    .catch(error => {
       throw new Error('Error al verificar disponibilidad: ' + (error as any).message);
     });
   }

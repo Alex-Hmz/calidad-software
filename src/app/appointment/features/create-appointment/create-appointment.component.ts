@@ -15,6 +15,7 @@ import { AppointmentEmailParams } from '../../../shared/models/notifications';
 import { UserService } from '../../../shared/services/users/user.service';
 import { DoctorProfile, PatientProfile } from '../../../shared/models/users';
 import { AdminPanelService, FreeDay } from '../../../shared/services/date-config/admin-panel.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-appointment',
@@ -156,7 +157,11 @@ export class CreateAppointmentComponent implements OnInit {
 
   async submit() {
     if (!this.auth.currentUser) {
-      alert('Debes iniciar sesión para agendar una cita');
+      Swal.fire({
+        title: "No autenticado",
+        text: "Debes iniciar sesión para agendar una cita",
+        icon: "warning"
+      });
       return;
     }
 
@@ -183,14 +188,13 @@ export class CreateAppointmentComponent implements OnInit {
 
 
     try {
-
       if(this.form.value.isTraced){
-        
         appointment.traceId = this.form.value.traceId;
       }
 
       const specialtyIdOfType = this.appointmentTypeService.getSpecialtyIdByAppointmentTypeId(appointment.typeId);
 
+      
       const assignDoctor: CreateAsignDoctorToAppointment = {
         userId: appointment.userId,
         typeId: specialtyIdOfType!,
@@ -199,6 +203,7 @@ export class CreateAppointmentComponent implements OnInit {
       }
 
       const doctorAvailable = await this.doctorDesigService.isDoctorAvailableToAppointment(assignDoctor);
+
       if(doctorAvailable !== null){
         if(this.form.value.isNewTrace){
           const newTrace: CreateTrace = {
@@ -209,43 +214,45 @@ export class CreateAppointmentComponent implements OnInit {
             isValid: true
           }
           appointment.traceId = await this.appointmentTraceService.create(newTrace);
-          
         }
         const appointmentId = await this.appointmentService.createAppointment(appointment);
-        const result = await this.appointmentService.asignDoctorToAppointment(appointmentId, doctorAvailable.doctor!.id)
-
-
-
-
+        const result = await this.appointmentService.asignDoctorToAppointment(appointmentId, doctorAvailable.doctor!.id);
 
         // Notificación Médico y usuario
+        const email: AppointmentEmailParams = {
+          to_name: this.patientInfo.name,
+          to_email: this.patientInfo.email,
+          to_cc: doctorAvailable.doctor?.email!,
+          from_name: doctorAvailable.doctor?.name!,
+          cita_fecha: appointment.date,
+          cita_hora: appointment.time,
+          accion: AppointmentStatusEnum.Pendiente,
+          rol_actor: 'doctor',
+          rol_receptor: 'paciente',
+          razon_cancelacion: null,
+          title: 'Pendiente de aceptación'
+        }
 
-      const email: AppointmentEmailParams = {
-        to_name: this.patientInfo.name,
-        to_email: this.patientInfo.email,
-        to_cc: doctorAvailable.doctor?.email!,
-        from_name: doctorAvailable.doctor?.name!,
-        cita_fecha: appointment.date,
-        cita_hora: appointment.time,
-        accion: AppointmentStatusEnum.Pendiente,
-        rol_actor: 'doctor',
-        rol_receptor: 'paciente',
-        razon_cancelacion: null,
-        // to_cc: doctorAvailable.doctor?.email!,
-        title: 'Pendiente de aceptación'
-      }
+        this.notificationService.send(email);
+          Swal.fire({
+            title: "Doctor asignado",
+            text: "Doctor asignado a la cita exitosamente: " + doctorAvailable.doctor?.name,
+            icon: "success"
+          });
+          
+          setTimeout(() => {
+            Swal.close();
+          }, 5000);
 
-      this.notificationService.send(email)
-      alert('Cita agendada exitosamente');
-
-      }else{
-        alert('No existe disponibilidad a ese horario')
-      }
+      } 
 
       this.form.reset();
     } catch (error: any) {
-      alert('Error: ' + error.message);
-
+      Swal.fire({
+        title: "Error",
+        text: "Error: " + error.message,
+        icon: "error"
+      });
     }
   }
 
@@ -289,7 +296,11 @@ export class CreateAppointmentComponent implements OnInit {
           }
         }
       }catch(e){
-        alert('Error al obtener las horas disponibles: ' + (e as any).message);
+        Swal.fire({
+          title: "Error",
+          text: "Error al obtener las horas disponibles: " + (e as any).message,
+          icon: "error"
+        });
       }
 
       

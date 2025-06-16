@@ -6,6 +6,7 @@ import { AuthService } from '../auth/auth.service';
 import { UserRoleEnum } from '../../models/enums';
 import { CreateAsignDoctorToAppointment } from '../../../appointment/models/appointment';
 import { AppointmentService } from '../appointments/appointment.service';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -259,7 +260,8 @@ export class DoctorDesigService {
       );
 
       if (!possibleDoctors || possibleDoctors.length === 0) {
-        return { doctor:null };
+        throw new Error("No se encontraron doctores disponibles con la especialidad y hora seleccionadas.");
+        
       }
 
       for (const doctor of possibleDoctors) {
@@ -279,15 +281,19 @@ export class DoctorDesigService {
         );
 
         if (appointmentCount < doctor.dailyAppointments) {
-          alert('Doctor asignado a la cita exitosamente: ' + doctor.name);
+
           return { doctor };
         }
       }
-      alert('Todos los doctores disponibles ya tienen sus citas completas para el día seleccionado.');
-      return { doctor:null };
+      
+      throw new Error("Todos los doctores disponibles ya tienen sus citas completas para el día seleccionado.");
 
     } catch (error) {
-      alert('Error al asignar doctor a la cita: ' + error);
+      Swal.fire({
+        title: "Error",
+        text: "Error al asignar doctor a la cita: " + error,
+        icon: "error"
+      });
       return { doctor:null };
     }
   }

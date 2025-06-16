@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DateConfigComponent } from './date-config.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { DateConfigRoutingModule } from './appointments-routing.module';
+import { DateConfigRoutingModule } from './date-config-routing.module';
 
 
 

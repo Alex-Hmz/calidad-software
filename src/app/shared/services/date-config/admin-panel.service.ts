@@ -47,4 +47,13 @@ export class AdminPanelService {
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as FreeDay));
   }
+  async getFreeDays(): Promise<FreeDay[]> {
+    // Assumes freeDay.date is stored as 'YYYY-MM-DD'
+    const q = query(
+      this.freeDaysRef,
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as FreeDay));
+  }
+
 }

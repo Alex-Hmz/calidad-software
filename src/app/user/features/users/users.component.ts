@@ -4,6 +4,7 @@ import { UserService } from '../../../shared/services/users/user.service';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { Auth } from '@angular/fire/auth';
 import { UserRoleEnum } from '../../../shared/models/enums';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-users',
@@ -46,15 +47,47 @@ export class UsersComponent {
 
       this._authService.createUserProfile(id, {...doctor, isActive: false})
         .then(() => {
-          this.getUsers()
-          alert('Doctor eliminado correctamente');
+          this.getUsers();
+          Swal.fire({
+            title: "Doctor eliminado",
+            text: "Doctor eliminado correctamente",
+            icon: "success"
+          });
         })
         .catch((error: { message: string; }) => {
           console.error('Error al eliminar la cita:', error);
-          alert('Error al eliminar la cita: ' + error.message);
+          Swal.fire({
+            title: "Error",
+            text: "Error al eliminar la cita: " + error.message,
+            icon: "error"
+          });
         });
         
       } 
+    }
+
+    async activate(id: string) {
+      const doctor = await this.userService.getUser(id, UserRoleEnum.doctor);
+
+      if (doctor != undefined) {
+        this._authService.createUserProfile(id, { ...doctor, isActive: true })
+          .then(() => {
+            this.getUsers();
+            Swal.fire({
+              title: "Doctor reactivado",
+              text: "Doctor activado correctamente",
+              icon: "success"
+            });
+          })
+          .catch((error: { message: string; }) => {
+            console.error('Error al activar el doctor:', error);
+            Swal.fire({
+              title: "Error",
+              text: "Error al activar el doctor: " + error.message,
+              icon: "error"
+            });
+          });
+      }
     }
 
 

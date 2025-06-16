@@ -18,39 +18,29 @@
         @if(!userService.loading() && !userService.error()){
           <p-dataview [value]="userService.users()">
               <ng-template let-items #list>
-            <div class="row">
-              <div class="col-12 mb-3" *ngFor="let user of items">
-                <div class="d-flex justify-content-around align-items-center p-3 border rounded shadow-sm">
-                  <div><strong>Nombre:</strong> {{ user.name }}</div>
-                  <div><strong>Email:</strong> {{ user.email }}</div>
-                  <div><strong>Especialidad:</strong> {{ user.specialtyName }}</div>
-                  <!-- <p-tag [value]="user.isActive ? 'Inactivo' : 'Activo'" severity="info"></p-tag> -->
-                  <div>
-                <p-button icon="pi pi-trash" aria-label="Delete" (onClick)="delete(user.id)"></p-button>
+                <div class="row">
+                  <div class="col-12 mb-3" *ngFor="let user of items">
+                    <div class="d-flex justify-content-around align-items-center p-3 border rounded shadow-sm">
+                      <div><strong>Nombre:</strong> {{ user.name }}</div>
+                      <div><strong>Email:</strong> {{ user.email }}</div>
+                      <div><strong>Especialidad:</strong> {{ user.specialtyName }}</div>
+                      <p-tag 
+                        [value]="user.isActive ? 'Activo' : 'Inactivo'" 
+                        [severity]="user.isActive ? 'info' : 'danger'">
+                      </p-tag>
+                      <div>
+                        <p-button *ngIf="user.isActive" icon="pi pi-trash" aria-label="Delete" (onClick)="delete(user.id)"></p-button>
+                        <p-button  *ngIf="!user.isActive" icon="pi pi-refresh" aria-label="Activate" (onClick)="activate(user.id)"></p-button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
               </ng-template>
           </p-dataview>
         }
 
 
       </div>
-      <!-- <div class="card-body" *ngIf="citasActuales.length > 0; else noCitas">
-        <ul class="list-group">
-          <li class="list-group-item" *ngFor="let cita of citasActuales">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <strong>Fecha:</strong> {{ cita.date }}<br>
-                <strong>Hora:</strong> {{ cita.time }}<br>
-                <strong>Motivo:</strong> {{ cita.reason }}
-              </div>
-              <span class="badge bg-info text-dark">{{ cita.estado }}</span>
-            </div>
-          </li>
-        </ul>
-      </div> -->
       <ng-template #noCitas>
         <div class="card-body">
           <p class="text-muted">Sin médicos registrados.</p>

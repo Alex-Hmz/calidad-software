@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { collection, CollectionReference, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { Specialty } from '../../models/specialty';
+import Swal from 'sweetalert2';
 
 interface SpecialtyState{
     specialties: Specialty[];
@@ -38,7 +39,6 @@ export class SpecialtyService {
     }));
 
     try {
-      // Remove all query filters for debugging
       const q = query(this.specialtiesRef, where('isValid', '==', true));
       const snapshot = await getDocs(q);
       const specialties = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Specialty));
@@ -52,15 +52,17 @@ export class SpecialtyService {
         }));
       }
 
-
       return true;
     } catch (error) {
-
       this._state.update((state) => ({
         ...state,
         error: true
       }));
-      console.error('Error fetching specialties:', error);
+      Swal.fire({
+        title: "Error",
+        text: "Error al obtener especialidades: " + (error as any).message,
+        icon: "error"
+      });
       return false;
     } finally {
       this._state.update((state) => ({
@@ -71,4 +73,4 @@ export class SpecialtyService {
   }
 }
 
-  
+

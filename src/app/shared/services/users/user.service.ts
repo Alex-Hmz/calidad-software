@@ -47,7 +47,7 @@ export class UserService {
       const snapshot = await getDocs(q);
       const users = snapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() } as DoctorProfile))
-      .filter(user => user.isActive === true);
+      // .filter(user => user.isActive === true);
 
       const specialtySnapshot = await getDocs(collection(this.firestore, 'specialties'));
       const specialtiesMap = new Map<string, string>();
@@ -114,21 +114,23 @@ export class UserService {
     if (!result) {
       throw new Error('Error al obtener los usuarios.');
     }
+    
+    const selectedTime = this.toMinutes(time);
 
     const doctors = this._state().users.filter(user => 
       user.role === UserRoleEnum.doctor 
       &&
-      // (user.schechule.start >= time && 
-      // time <= user.schechule.end) 
-      // &&
+      this.toMinutes(user.schechule.start) <= selectedTime &&
+      selectedTime <= this.toMinutes(user.schechule.end)
+      &&
       user.specialty === specialty && 
       user.isActive 
     );
 
-    if(doctors.length === 0){
-      throw new Error('No se encontraron doctores disponibles con la especialidad y hora seleccionadas.');
-    }
     return doctors;
   }
-  
+  toMinutes(time: string): number {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}
 }

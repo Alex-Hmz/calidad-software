@@ -6,6 +6,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { UserService } from '../../../shared/services/users/user.service';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { SpecialtyService } from '../../../shared/services/specialty-data-access/specialty.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-doctor-register',
@@ -118,7 +119,11 @@ export class DoctorRegisterComponent {
       const [endHour] = endTime.split(':').map(Number);
       const maxAppointments = endHour - startHour;
       if (dailyAppointments > maxAppointments) {
-        this.error = 'El número de citas diarias no puede ser mayor al número de horas seleccionadas.';
+        Swal.fire({
+          title: "Citas diarias excedidas",
+          text: "El número de citas diarias no puede ser mayor al número de horas seleccionadas.",
+          icon: "warning"
+        });
         return;
       }
     }
@@ -134,12 +139,12 @@ export class DoctorRegisterComponent {
           phone,
           address,
           schechule:{
-            start: this.form.value.startTime as string, // Agregar hora de inicio
-            end: this.form.value.endTime as string// Agregar hora de fin
+            start: this.form.value.startTime as string,
+            end: this.form.value.endTime as string
           },
           dailyAppointments,
           role: UserRoleEnum.doctor, 
-          specialty, // Agregar especialidad
+          specialty,
           createdAt: new Date(),
           isFirstLogin: true,
           isActive: true
@@ -147,18 +152,34 @@ export class DoctorRegisterComponent {
 
         const success = await this.authService.createUserProfile(user.uid, doctorProfile);
         if (success) {
-          this.success = 'Registro exitoso';
+          Swal.fire({
+            title: "Registro exitoso",
+            text: "El usuario fue registrado correctamente.",
+            icon: "success"
+          });
           setTimeout(() => {
-          this.router.navigate(['/appointment/list']);
+            this.router.navigate(['/appointment/list']);
           }, 2000);
         } else {
-          this.error = 'Error al crear el perfil del usuario';
+          Swal.fire({
+            title: "Error",
+            text: "Error al crear el perfil del usuario",
+            icon: "error"
+          });
         }
       } else {
-        this.error = 'Error al registrar el usuario';
+        Swal.fire({
+          title: "Error",
+          text: "Error al registrar el usuario",
+          icon: "error"
+        });
       }
     }catch (error: any) {
-      alert('Error: ' + error.message);
+      Swal.fire({
+        title: "Error",
+        text: "Error: " + error.message,
+        icon: "error"
+      });
     }
 
 

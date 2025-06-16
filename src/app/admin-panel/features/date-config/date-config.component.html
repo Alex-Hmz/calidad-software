@@ -21,4 +21,19 @@
       </button>
     </form>
   </div>
+
+  <div class="card mt-4 p-3 shadow-sm mx-auto" style="max-width: 400px;">
+    <h5 class="mb-3">Días bloqueados este año</h5>
+    <ul class="list-group">
+      <li *ngFor="let day of bannedDays" class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+          <i class="pi pi-calendar"></i> {{ day.date }}<br>
+          <small class="text-muted">{{ day.reason }}</small>
+        </span>
+      </li>
+      <li *ngIf="bannedDays.length === 0" class="list-group-item text-muted">
+        No hay días bloqueados este año.
+      </li>
+    </ul>
+  </div>
 </div>

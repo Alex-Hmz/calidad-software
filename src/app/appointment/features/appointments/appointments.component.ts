@@ -8,6 +8,7 @@ import { Appointment } from '../../models/appointment';
 import { UserService } from '../../../shared/services/users/user.service';
 import { NotificationService } from '../../../shared/services/notification/notification.service';
 import { DoctorProfile, PatientProfile } from '../../../shared/models/users';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-appointments',
@@ -62,7 +63,11 @@ export class AppointmentsComponent {
     // Implementar lógica de eliminación de cita
 
     if (this.user === null) {
-      alert('No se puede eliminar la cita, no existe un usuario autenticado');
+      Swal.fire({
+        title: "No autenticado",
+        text: "No se puede eliminar la cita, no existe un usuario autenticado",
+        icon: "warning"
+      });
       return;
     }
     let email: AppointmentEmailParams = {
@@ -85,20 +90,32 @@ export class AppointmentsComponent {
       }
 
       if( !cita.doctorId) {
-        alert('No se puede eliminar la cita, no existe un doctor asignado');
+        Swal.fire({
+          title: "Sin doctor asignado",
+          text: "No se puede eliminar la cita, no existe un doctor asignado",
+          icon: "warning"
+        });
         return;
       }
 
       const doctorResult = await this.userService.getUser(cita.doctorId, UserRoleEnum.doctor);
       if (!doctorResult || (doctorResult as DoctorProfile).email === undefined) {
-        alert('No se puede eliminar la cita, no existe un doctor asignado');
+        Swal.fire({
+          title: "Sin doctor asignado",
+          text: "No se puede eliminar la cita, no existe un doctor asignado",
+          icon: "warning"
+        });
         return;
       }
       const doctor: DoctorProfile = doctorResult as DoctorProfile;
 
       const patientResult = await this.userService.getUser(cita.userId, UserRoleEnum.patient);
       if (!patientResult || (patientResult as PatientProfile).email === undefined) {
-        alert('No se puede eliminar la cita, no existe un doctor asignado');
+        Swal.fire({
+          title: "Sin paciente asignado",
+          text: "No se puede eliminar la cita, no existe un doctor asignado",
+          icon: "warning"
+        });
         return;
       }
       const patient: PatientProfile = patientResult as PatientProfile;
@@ -171,7 +188,11 @@ export class AppointmentsComponent {
     })
     .catch((error: { message: string; }) => {
       console.error('Error al eliminar la cita:', error);
-      alert('Error al eliminar la cita: ' + error.message);
+      Swal.fire({
+        title: "Error",
+        text: "Error al eliminar la cita: " + error.message,
+        icon: "error"
+      });
     });
     
 
@@ -184,7 +205,11 @@ export class AppointmentsComponent {
 
   async confirm(cita: Appointment) {
     if (this.user === null) {
-      alert('No se puede confirmar la cita, no existe un usuario autenticado');
+      Swal.fire({
+        title: "No autenticado",
+        text: "No se puede confirmar la cita, no existe un usuario autenticado",
+        icon: "warning"
+      });
       return;
     }
     let email: AppointmentEmailParams = {
@@ -208,20 +233,32 @@ export class AppointmentsComponent {
         }
 
         if (!cita.doctorId) {
-          alert('No se puede confirmar la cita, no existe un doctor asignado');
+          Swal.fire({
+            title: "Sin doctor asignado",
+            text: "No se puede confirmar la cita, no existe un doctor asignado",
+            icon: "warning"
+          });
           return;
         }
 
         const doctorResult = await this.userService.getUser(cita.doctorId, UserRoleEnum.doctor);
         if (!doctorResult || (doctorResult as DoctorProfile).email === undefined) {
-          alert('No se puede confirmar la cita, no existe un doctor asignado');
+          Swal.fire({
+            title: "Sin doctor asignado",
+            text: "No se puede confirmar la cita, no existe un doctor asignado",
+            icon: "warning"
+          });
           return;
         }
         const doctor: DoctorProfile = doctorResult as DoctorProfile;
 
         const patientResult = await this.userService.getUser(cita.userId, UserRoleEnum.patient);
         if (!patientResult || (patientResult as PatientProfile).email === undefined) {
-          alert('No se puede confirmar la cita, no existe un paciente asignado');
+          Swal.fire({
+            title: "Sin paciente asignado",
+            text: "No se puede confirmar la cita, no existe un paciente asignado",
+            icon: "warning"
+          });
           return;
         }
         const patient: PatientProfile = patientResult as PatientProfile;
@@ -288,7 +325,11 @@ export class AppointmentsComponent {
       })
       .catch((error: { message: string }) => {
         console.error('Error al confirmar la cita:', error);
-        alert('Error al confirmar la cita: ' + error.message);
+        Swal.fire({
+          title: "Error",
+          text: "Error al confirmar la cita: " + error.message,
+          icon: "error"
+        });
       });
   }
   agendarCita() {

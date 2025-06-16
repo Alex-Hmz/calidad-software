@@ -1,6 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { Firestore, collection, addDoc, getDocs, query, where, doc, updateDoc, getDoc, CollectionReference } from '@angular/fire/firestore';
 import { Treatment, CreateTreatment, UpdateTreatment } from '../../models/treatments';
+import Swal from 'sweetalert2';
 
 interface TreatmentsState {
   treatments: Treatment[];
@@ -78,13 +79,41 @@ export class TreatmentsService {
   }
 
   async createTreatment(treatment: CreateTreatment): Promise<string> {
-    const docRef = await addDoc(this.treatmentsRef, treatment);
-    return docRef.id;
+    try {
+      const docRef = await addDoc(this.treatmentsRef, treatment);
+      Swal.fire({
+        title: "Tratamiento creado",
+        text: "Tratamiento creado correctamente.",
+        icon: "success"
+      });
+      return docRef.id;
+    } catch (error: any) {
+      Swal.fire({
+        title: "Error",
+        text: "Error al crear tratamiento: " + error.message,
+        icon: "error"
+      });
+      throw error;
+    }
   }
 
   async updateTreatment(update: UpdateTreatment): Promise<void> {
-    const treatmentDoc = doc(this.firestore, 'treatments', update.id);
-    const { id, ...data } = update;
-    await updateDoc(treatmentDoc, { ...data, updatedAt: Date.now() });
+    try {
+      const treatmentDoc = doc(this.firestore, 'treatments', update.id);
+      const { id, ...data } = update;
+      await updateDoc(treatmentDoc, { ...data, updatedAt: Date.now() });
+      Swal.fire({
+        title: "Tratamiento actualizado",
+        text: "Tratamiento actualizado correctamente.",
+        icon: "success"
+      });
+    } catch (error: any) {
+      Swal.fire({
+        title: "Error",
+        text: "Error al actualizar tratamiento: " + error.message,
+        icon: "error"
+      });
+      throw error;
+    }
   }
 }

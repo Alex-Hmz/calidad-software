@@ -5,6 +5,7 @@ import { UserService } from '../../../shared/services/users/user.service';
 import { CreateDoctorProfile, DoctorProfile, PatientProfile } from '../../../shared/models/users';
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { UserRoleEnum } from '../../../shared/models/enums';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-form',
@@ -115,7 +116,11 @@ export class UserFormComponent {
       const [endHour] = endTime.split(':').map(Number);
       const maxAppointments = endHour - startHour;
       if (dailyAppointments > maxAppointments) {
-        this.error = 'El número de citas diarias no puede ser mayor al número de horas seleccionadas.';
+        Swal.fire({
+          title: "Citas diarias excedidas",
+          text: "El número de citas diarias no puede ser mayor al número de horas seleccionadas.",
+          icon: "warning"
+        });
         return;
       }
     }
@@ -131,30 +136,46 @@ export class UserFormComponent {
           phone,
           address,
           schechule:{
-            start: this.form.value.startTime as string, // Agregar hora de inicio
-            end: this.form.value.endTime as string// Agregar hora de fin
+            start: this.form.value.startTime as string,
+            end: this.form.value.endTime as string
           },
           dailyAppointments,
           role: UserRoleEnum.doctor, 
-          specialty, // Agregar especialidad
+          specialty,
           createdAt: new Date(),
           isFirstLogin: true
         };
 
         const success = await this.authService.createUserProfile(user.uid, doctorProfile);
         if (success) {
+          Swal.fire({
+            title: "Registro exitoso",
+            text: "El usuario fue registrado correctamente.",
+            icon: "success"
+          });
           this.success = 'Registro exitoso';
-          // setTimeout(() => {
-          // this.router.navigate(['/users/list']);
-          // }, 2000);
         } else {
+          Swal.fire({
+            title: "Error",
+            text: "Error al crear el perfil del usuario",
+            icon: "error"
+          });
           this.error = 'Error al crear el perfil del usuario';
         }
       } else {
+        Swal.fire({
+          title: "Error",
+          text: "Error al registrar el usuario",
+          icon: "error"
+        });
         this.error = 'Error al registrar el usuario';
       }
     }catch (error: any) {
-      alert('Error: ' + error.message);
+      Swal.fire({
+        title: "Error",
+        text: "Error: " + error.message,
+        icon: "error"
+      });
     }
 
 

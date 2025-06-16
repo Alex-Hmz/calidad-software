@@ -5,6 +5,7 @@ import { TreatmentsService } from '../../../shared/services/treatments/treatment
 import { CreateTreatment, UpdateTreatment, Treatment } from '../../../shared/models/treatments';
 import { AppointmentService } from '../../../shared/services/appointments/appointment.service';
 import { AppointmentStatusEnum } from '../../../shared/models/enums';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-treatment',
@@ -59,7 +60,11 @@ export class CreateComponent implements OnInit {
   async submit() {
     if (this.form.invalid || !this.appointmentId || !this.userId) {
       this.form.markAllAsTouched();
-      alert('Faltan datos requeridos en la URL o el formulario.');
+      Swal.fire({
+        title: "Faltan datos",
+        text: "Faltan datos requeridos en la URL o el formulario.",
+        icon: "warning"
+      });
       return;
     }
     this.loading = true;
@@ -76,10 +81,18 @@ export class CreateComponent implements OnInit {
       };
       try {
         await this.treatmentsService.updateTreatment(update);
-        alert('Tratamiento actualizado correctamente');
+        Swal.fire({
+          title: "Tratamiento actualizado",
+          text: "Tratamiento actualizado correctamente",
+          icon: "success"
+        });
         this.form.reset();
       } catch (e: any) {
-        alert('Error al actualizar tratamiento: ' + e.message);
+        Swal.fire({
+          title: "Error",
+          text: "Error al actualizar tratamiento: " + e.message,
+          icon: "error"
+        });
       } finally {
         this.loading = false;
       }
@@ -99,10 +112,18 @@ export class CreateComponent implements OnInit {
           this.appointmentId,
           AppointmentStatusEnum.Realizada
         );
-        alert('Tratamiento creado correctamente y cita marcada como realizada');
+        Swal.fire({
+          title: "Tratamiento creado",
+          text: "Tratamiento creado correctamente y cita marcada como realizada",
+          icon: "success"
+        });
         this.form.reset();
       } catch (e: any) {
-        alert('Error al crear tratamiento o actualizar cita: ' + e.message);
+        Swal.fire({
+          title: "Error",
+          text: "Error al crear tratamiento o actualizar cita: " + e.message,
+          icon: "error"
+        });
       } finally {
         this.loading = false;
       }

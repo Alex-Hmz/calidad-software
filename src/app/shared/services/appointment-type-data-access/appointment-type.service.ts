@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { collection, CollectionReference, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { AppointmentType } from '../../models/appointment-type';
+import Swal from 'sweetalert2';
 
 interface AppointmentTypeState{
     types: AppointmentType[];
@@ -61,7 +62,11 @@ export class AppointmentTypeService {
           ...state,
           error: true
       }));
-
+      Swal.fire({
+        title: "Error",
+        text: "Error al obtener tipos de consulta: " + (error as any).message,
+        icon: "error"
+      });
       return false;
 
     }finally {
