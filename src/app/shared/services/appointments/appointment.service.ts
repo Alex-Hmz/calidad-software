@@ -102,8 +102,6 @@ export class AppointmentService {
 
       const now = new Date();
 
-      console.log(snapshot);
-      
       if(citas){
         // Helper to check if an appointment is in the current hour
         const isCurrentHour = (c: Appointment) => {

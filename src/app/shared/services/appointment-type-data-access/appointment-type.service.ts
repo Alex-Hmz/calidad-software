@@ -32,8 +32,6 @@ export class AppointmentTypeService {
 
   async getAll(): Promise<Boolean> {
 
-    console.log('Fetching appointment types...');
-    
     this._state.update((state) => ({
         ...state,
         loading: true,
@@ -45,9 +43,6 @@ export class AppointmentTypeService {
       const q = query(this.appointmentTypeRef, where('isValid', '==', true));
       const snapshot = await getDocs(q);
       const types = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as AppointmentType));
-
-      console.log(`Fetched ${types.length} appointment types.`);
-      console.log('types', types);
       
       if(types){
         this._state.update((state) => ({

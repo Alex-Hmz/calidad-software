@@ -115,13 +115,6 @@ export class UserService {
       throw new Error('Error al obtener los usuarios.');
     }
 
-    console.log(specialty);
-    console.log(time);
-
-    this._state().users.forEach((doc) =>{
-      console.log(doc.specialty);
-      
-    })
     const doctors = this._state().users.filter(user => 
       user.role === UserRoleEnum.doctor 
       &&
@@ -131,12 +124,6 @@ export class UserService {
       user.specialty === specialty && 
       user.isActive 
     );
-
-    doctors.forEach((doc) =>{
-      console.log(doc.specialty);
-      
-    })
-    
 
     if(doctors.length === 0){
       throw new Error('No se encontraron doctores disponibles con la especialidad y hora seleccionadas.');

@@ -115,13 +115,9 @@ export class CreateAppointmentComponent implements OnInit {
 
     // If editing, fetch appointment by id and patch form
     if (this.editionMode && this.id) {
-      console.log("ex");
-      
       const appointment = await this.appointmentService.getAppointmentById(this.id);
       if (appointment) {
 
-        console.log(" appointment.date: ", appointment.date);
-        
         this.form.patchValue({
           date: new Date(appointment.date),
           time: appointment.time,
@@ -140,7 +136,6 @@ export class CreateAppointmentComponent implements OnInit {
         if (usuario && (usuario as PatientProfile)) {
           this.patientInfo = usuario as PatientProfile;
         }
-        console.log(this.patientInfo);
       });
 
 
@@ -240,23 +235,12 @@ export class CreateAppointmentComponent implements OnInit {
         title: 'Pendiente de aceptación'
       }
 
-
-      console.log('Email params:', email);
-      
       this.notificationService.send(email)
       alert('Cita agendada exitosamente');
 
       }else{
         alert('No existe disponibilidad a ese horario')
       }
-
-
-
-
-      
-
-
-
 
       this.form.reset();
     } catch (error: any) {

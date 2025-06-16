@@ -185,9 +185,6 @@ export class UserFormComponent {
   horarioValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
     const start = group.get('startTime')?.value;
     const end = group.get('endTime')?.value;
-    console.log("Validando horario start: ", start);
-    console.log("Validando horario end: ", end);
-    
 
     // Si alguno no está definido aún, no validar
     if (!start || !end) return null;

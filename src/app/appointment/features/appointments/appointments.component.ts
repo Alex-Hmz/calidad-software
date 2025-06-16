@@ -200,9 +200,6 @@ export class AppointmentsComponent {
       to_cc: null,
       title: ''
     };
-    console.log('Confirmando cita:', cita);
-    
-    console.log(cita);
     
     this.appointmentService.updateAppointmentStatus(cita.id, AppointmentStatusEnum.Confirmada)
       .then(async () => {
@@ -229,8 +226,6 @@ export class AppointmentsComponent {
         }
         const patient: PatientProfile = patientResult as PatientProfile;
 
-        console.log("patient: ", patient);
-        
         switch (this.user.role) {
           case UserRoleEnum.patient: {
             email = {

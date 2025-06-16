@@ -54,7 +54,6 @@ export class UsersComponent {
           alert('Error al eliminar la cita: ' + error.message);
         });
         
-        console.log('Eliminar doctor' + id);
       } 
     }
 

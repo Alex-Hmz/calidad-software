@@ -84,9 +84,6 @@ export class AppointmentTraceService {
     async create(trace: CreateTrace): Promise<string> {
       try {
         const docRef = await addDoc(this.taracesRef, trace);
-        console.log('Nuevo seguimiento creado con ID:', docRef.id);
-        console.log('Nuevo seguimiento creado:', docRef);
-        
         return docRef.id;
       } catch (error) {
         throw new Error('Error al crear la cita: ' + (error as any).message);

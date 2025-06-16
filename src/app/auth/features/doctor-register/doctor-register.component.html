@@ -118,13 +118,16 @@
             <div class="p-field mb-4">
               <label for="specialty" class="d-block mb-2 fw-medium"><i class="pi pi-stethoscope"></i> Especialidad</label>
               <span class="p-input-icon-left w-100">
-                <input 
-                  id="specialty" 
-                  type="text" 
-                  pInputText 
-                  formControlName="specialty" 
-                  placeholder="Tu especialidad médica"
-                  class="w-100 p-inputtext-md">
+                <p-select
+                  id="specialty"
+                  formControlName="specialty"
+                  [options]="specialtyService.specialties()"
+                  [optionValue]="'id'"
+                  placeholder="Selecciona una especialidad"
+                  optionLabel="name"
+                  class="w-100 p-inputtext-md"
+                >
+                </p-select>
               </span>
               <small 
                 *ngIf="form.get('specialty')?.invalid && form.get('specialty')?.touched" 

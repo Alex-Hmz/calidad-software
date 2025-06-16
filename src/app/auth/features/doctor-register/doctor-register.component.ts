@@ -29,7 +29,7 @@ export class DoctorRegisterComponent {
     private router: Router,
     private userService: UserService,
     private authService: AuthService,
-    private specialtyService: SpecialtyService
+    public specialtyService: SpecialtyService
   ) {
     this.form = this.fb.group({
         name: ['', Validators.required],
@@ -60,13 +60,11 @@ export class DoctorRegisterComponent {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.id = this.route.snapshot.paramMap.get('id') ?? null;
     this.editionMode = !!this.id;
     this.setAvailableTimes();
-    const result = this.specialtyService.getAll();
-    const specialties = this.specialtyService.specialties();
-    console.log("Specialties: ", specialties);
+    const result = await this.specialtyService.getAll();
     
     if (this.editionMode) {
       this.userService.getUser(this.id!, UserRoleEnum.doctor)

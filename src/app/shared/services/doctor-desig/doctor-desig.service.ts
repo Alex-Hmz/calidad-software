@@ -245,7 +245,6 @@ export class DoctorDesigService {
         const user = await this.authService.register(doctor.email, '123456', UserRoleEnum.doctor);
         const success = await this.authService.createUserProfile(user.uid, doctor);
 
-        console.log(success, 'Doctor created successfully:', doctor.name);
       } catch (error) {
         console.error('Error creating mock doctor:', doctor.name, error);
       }
@@ -259,8 +258,6 @@ export class DoctorDesigService {
         assignAppoint.time
       );
 
-      console.log(`possibleDoctors: ${possibleDoctors}`);
-      
       if (!possibleDoctors || possibleDoctors.length === 0) {
         return { doctor:null };
       }

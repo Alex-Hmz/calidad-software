@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
 
 
 
@@ -22,7 +23,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextModule,
     ButtonModule,
     ProgressSpinnerModule,
-    InputNumberModule
+    InputNumberModule,
+    SelectModule
   ]
 })
 export class DoctorRegisterModule { }

@@ -71,8 +71,6 @@ export class AuthService {
               refreshToken: user.refreshToken,
               role: userProfile.role,
             };
-            console.log("El usuario ha iniciado sesión:", credentials);
-
             
             this.setCredentials(credentials, true);
             this.loggedInSubject.next(true);
