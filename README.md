@@ -22,37 +22,21 @@ Agenda Médica es un sistema de gestión de citas médicas desarrollado en Angul
 
 - Tener instalado **Node.js** (versión 16 o superior).  
   Puedes descargarlo desde: [https://nodejs.org/es/](https://nodejs.org/es/)
-- Tener instalado **Angular CLI**  
-  Instálalo ejecutando en la terminal:
-  ```bash
-  npm install -g @angular/cli
-  ```
-- Tener una cuenta y proyecto en **Firebase** (con Firestore y Auth habilitados)
-- Tener una cuenta en **EmailJS** (para notificaciones por correo)
 
-## Instalación
+## Instalación y ejecución
 
-1. **Clona el repositorio:**
+1. **Descarga el proyecto y entra a la carpeta:**
    ```bash
    git clone https://github.com/tu-usuario/agenda-medica.git
    cd agenda-medica
    ```
 
-2. **Instala las dependencias:**
+2. **Instala las dependencias (esto instalará Angular CLI y todo lo necesario):**
    ```bash
    npm install
    ```
 
-3. **Configura Firebase:**
-   - Copia tu configuración de Firebase en los archivos `src/environments/environment.development.ts` y `src/environments/environment.ts`.
-   - Crea las colecciones necesarias en Firestore: `users`, `appointments`, `treatments`, `freeDays`, `specialties`, `appointmentType`, etc.
-
-4. **Configura EmailJS:**
-   - Agrega tus claves de EmailJS en los archivos de entorno bajo la propiedad `emailjs`.
-
-## Cómo ejecutar el proyecto
-
-1. **Inicia el servidor de desarrollo:**
+3. **Ejecuta la aplicación:**
    ```bash
    npm run start
    ```
@@ -61,13 +45,28 @@ Agenda Médica es un sistema de gestión de citas médicas desarrollado en Angul
    ng serve
    ```
 
-2. **Abre tu navegador y visita:**  
+4. **Abre tu navegador y visita:**  
    [http://localhost:4200](http://localhost:4200)
 
-## Estructura del proyecto
+## Notas
 
-- `src/app/auth` - Autenticación y registro
-- `src/app/user` - Gestión de usuarios (pacientes, doctores)
+- **No necesitas configurar nada extra para Firestore**: El proyecto ya está listo para conectarse a Firebase/Firestore con la configuración incluida en los archivos de entorno.
+
+## Scripts útiles
+
+- `npm run start` o `ng serve` - Inicia el servidor de desarrollo
+- `ng build` - Compila el proyecto para producción
+- `ng test` - Ejecuta los tests unitarios
+
+## Licencia
+
+MIT
+
+---
+
+**Nota:**  
+- Recuerda actualizar las variables de entorno y las reglas de Firebase para producción.
+- Para cualquier duda o problema, contacta al responsable del proyecto o abre un issue en GitHub.
 - `src/app/appointment` - Funcionalidades de citas
 - `src/app/treatments` - Gestión de tratamientos
 - `src/app/medical-record` - Expedientes médicos
