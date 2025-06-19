@@ -30,14 +30,15 @@ import { MedicalRecordComponent } from './medical-record/features/medical-record
 
   ],
   providers: [
-      provideFirebaseApp(() => initializeApp({ 
-        projectId: "agenda-medica-2ae34", 
-        appId: "1:296884392563:web:b5334e3578c798d8d91006", 
-        storageBucket: "agenda-medica-2ae34.firebasestorage.app", 
-        apiKey: "AIzaSyD-NLIdWknqeybvmPbUxjR67-AOCOYgiM4", 
-        authDomain: "agenda-medica-2ae34.firebaseapp.com", 
-        messagingSenderId: "296884392563", 
-        measurementId: "G-JET93KM5Z7" })),
+      provideFirebaseApp(() => initializeApp({
+  apiKey: "AIzaSyBKY2orctS4bEY2czaZAg2iEZTV391GK9Y",
+  authDomain: "agenda-medica-cds.firebaseapp.com",
+  projectId: "agenda-medica-cds",
+  storageBucket: "agenda-medica-cds.firebasestorage.app",
+  messagingSenderId: "895844089599",
+  appId: "1:895844089599:web:e1eea3a496bbe2af4796ca",
+  measurementId: "G-YKJ892KS75"
+})),
 
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

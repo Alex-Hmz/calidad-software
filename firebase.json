@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/agenda-medica/browser",
+    "public": "dist/agenda-medica-cds/browser",
     "ignore": [
       "firebase.json",
       "**/.*",

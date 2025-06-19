@@ -23,221 +23,69 @@ export class DoctorDesigService {
     
   ) {
     this.taracesRef = collection(this.firestore, 'users');
-  //     const fixedMockDoctors: CreateDoctorProfile[] = [
-  //   {
-  //     name: 'Dra. Fernanda López',
-  //     email: 'fernanda.lopez@clinicapp.com',
-  //     birthdate: new Date('1985-06-10'),
-  //     phone: '5512345678',
-  //     address: 'Av. Reforma 123, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'IPHtUZ4TnIrOAnQRCvGu', // Ginecología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dr. Jorge Martínez',
-  //     email: 'jorge.martinez@clinicapp.com',
-  //     birthdate: new Date('1979-11-20'),
-  //     phone: '5598765432',
-  //     address: 'Insurgentes Sur 404, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: '8coQoXzrZXayVTzLiLVV', // Medicina General
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dra. Mariana Ruiz',
-  //     email: 'mariana.ruiz@clinicapp.com',
-  //     birthdate: new Date('1990-03-18'),
-  //     phone: '5587654321',
-  //     address: 'Col. Del Valle, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'lnyjOQLJ90GMyjv4ddzR', // Dermatología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dr. Héctor Sánchez',
-  //     email: 'hector.sanchez@clinicapp.com',
-  //     birthdate: new Date('1982-08-02'),
-  //     phone: '5543216789',
-  //     address: 'Coyoacán, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'FA0exkPh8vWiqtCfPSeu', // Cardiología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dra. Laura Castillo',
-  //     email: 'laura.castillo@clinicapp.com',
-  //     birthdate: new Date('1988-12-25'),
-  //     phone: '5577889922',
-  //     address: 'Narvarte, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'I2oxnp9VkLyQbxU6eAlD', // Nutrición
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dr. Carlos Navarro',
-  //     email: 'carlos.navarro@clinicapp.com',
-  //     birthdate: new Date('1975-04-30'),
-  //     phone: '5556677889',
-  //     address: 'Azcapotzalco, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: '4vOkDLYQGYBEeu5NPYyb', // Pediatría
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dra. Alejandra Torres',
-  //     email: 'alejandra.torres@clinicapp.com',
-  //     birthdate: new Date('1992-07-15'),
-  //     phone: '5533445566',
-  //     address: 'Roma Norte, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'n8VYjdIylutGDLnIxQcN', // Psicología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dr. Luis Mendoza',
-  //     email: 'luis.mendoza@clinicapp.com',
-  //     birthdate: new Date('1983-01-21'),
-  //     phone: '5599334455',
-  //     address: 'Centro Histórico, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'BYjT3uQ4BCiwLD1zzERS', // Odontología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dra. Gabriela Paredes',
-  //     email: 'gabriela.paredes@clinicapp.com',
-  //     birthdate: new Date('1995-09-12'),
-  //     phone: '5566778899',
-  //     address: 'Santa María la Ribera, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'miD2MgSXvv6S5gabLkvu', // Oftalmología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dr. Enrique Rojas',
-  //     email: 'enrique.rojas@clinicapp.com',
-  //     birthdate: new Date('1980-05-05'),
-  //     phone: '5544556677',
-  //     address: 'Lindavista, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'KTGDIYimPIjdIcluhdZF', // Otorrinolaringología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dra. Paola Vázquez',
-  //     email: 'paola.vazquez@clinicapp.com',
-  //     birthdate: new Date('1991-10-10'),
-  //     phone: '5522113344',
-  //     address: 'San Ángel, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'KpmbQcy4UrtYuHxAiRYe', // Traumatología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dr. Ricardo Díaz',
-  //     email: 'ricardo.diaz@clinicapp.com',
-  //     birthdate: new Date('1986-03-03'),
-  //     phone: '5533557799',
-  //     address: 'Polanco, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: '8coQoXzrZXayVTzLiLVV', // Medicina General
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dra. Mónica Herrera',
-  //     email: 'monica.herrera@clinicapp.com',
-  //     birthdate: new Date('1993-11-11'),
-  //     phone: '5544992211',
-  //     address: 'Mixcoac, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'lnyjOQLJ90GMyjv4ddzR', // Dermatología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dr. Alan Ortega',
-  //     email: 'alan.ortega@clinicapp.com',
-  //     birthdate: new Date('1978-09-01'),
-  //     phone: '5556667788',
-  //     address: 'Tláhuac, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'FA0exkPh8vWiqtCfPSeu', // Cardiología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   },
-  //   {
-  //     name: 'Dra. Rebeca Morales',
-  //     email: 'rebeca.morales@clinicapp.com',
-  //     birthdate: new Date('1989-04-17'),
-  //     phone: '5522334455',
-  //     address: 'Xochimilco, CDMX',
-  //     role: UserRoleEnum.doctor,
-  //     createdAt: new Date(),
-  //     isActive: true,
-  //     isFirstLogin: true,
-  //     specialty: 'n8VYjdIylutGDLnIxQcN', // Psicología
-  //     dailyAppointments: 8,
-  //     schechule: { start: '09:00', end: '17:00' }
-  //   }
-  // ];
+const extraMockDoctors: CreateDoctorProfile[] = [
+  {
+    name: 'Dra. Isabel Ramírez',
+    email: 'isabel.ramirez@clinicapp.com',
+    birthdate: new Date('1984-01-12'),
+    phone: '5566112233',
+    address: 'Santa Fe, CDMX',
+    role: UserRoleEnum.doctor,
+    createdAt: new Date(),
+    isActive: true,
+    isFirstLogin: true,
+    specialty: '1', // Pediatría
+    dailyAppointments: 6,
+    schechule: { start: '10:00', end: '16:00' }
+  },
+  {
+    name: 'Dr. Esteban Lara',
+    email: 'esteban.lara@clinicapp.com',
+    birthdate: new Date('1980-02-14'),
+    phone: '5544332211',
+    address: 'San Jerónimo, CDMX',
+    role: UserRoleEnum.doctor,
+    createdAt: new Date(),
+    isActive: true,
+    isFirstLogin: true,
+    specialty: '2', // Ginecología
+    dailyAppointments: 7,
+    schechule: { start: '08:00', end: '14:00' }
+  },
+  {
+    name: 'Dra. Patricia Jiménez',
+    email: 'patricia.jimenez@clinicapp.com',
+    birthdate: new Date('1990-09-09'),
+    phone: '5599887766',
+    address: 'Tlalpan, CDMX',
+    role: UserRoleEnum.doctor,
+    createdAt: new Date(),
+    isActive: true,
+    isFirstLogin: true,
+    specialty: '3', // Psicología
+    dailyAppointments: 5,
+    schechule: { start: '13:00', end: '19:00' }
+  },
+  {
+    name: 'Dr. Roberto Aguilar',
+    email: 'roberto.aguilar@clinicapp.com',
+    birthdate: new Date('1977-05-18'),
+    phone: '5522993344',
+    address: 'Cuajimalpa, CDMX',
+    role: UserRoleEnum.doctor,
+    createdAt: new Date(),
+    isActive: true,
+    isFirstLogin: true,
+    specialty: '4', // Cardiología
+    dailyAppointments: 9,
+    schechule: { start: '07:00', end: '13:00' }
+  }
+];
+
+
 
     
-  //   this.createMockDoctors(fixedMockDoctors);
+    // this.createMockDoctors(extraMockDoctors);
   }
 
   private async createMockDoctors(mockDoctors: CreateDoctorProfile[]) {
@@ -289,11 +137,7 @@ export class DoctorDesigService {
       throw new Error("Todos los doctores disponibles ya tienen sus citas completas para el día seleccionado.");
 
     } catch (error) {
-      Swal.fire({
-        title: "Error",
-        text: "Error al asignar doctor a la cita: " + error,
-        icon: "error"
-      });
+
       return { doctor:null };
     }
   }

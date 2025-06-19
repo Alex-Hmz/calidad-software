@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "agenda-medica-2ae34"
-  }
+    "default": "agenda-medica-2ae34",
+    "calidad": "agenda-medica-cds"
+  },
+  "targets": {},
+  "etags": {}
 }

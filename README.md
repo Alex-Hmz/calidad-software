@@ -1,59 +1,104 @@
-# AgendaMedica
+# Agenda Médica
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
+Agenda Médica es un sistema de gestión de citas médicas desarrollado en Angular y Firebase. Permite a pacientes agendar citas, a doctores gestionar su agenda y a administradores configurar días bloqueados y gestionar usuarios.
 
-## Development server
+## Características
 
-To start a local development server, run:
+- Autenticación de usuarios (pacientes, doctores, administradores)
+- Registro de pacientes y doctores
+- Agendado y gestión de citas médicas
+- Asignación automática de doctores y control de disponibilidad
+- Seguimiento de tratamientos y expedientes médicos
+- Notificaciones por correo electrónico (EmailJS)
+- Panel de administración para bloquear días (ej. feriados)
+- Control de acceso por roles
 
-```bash
-ng serve
-```
+## Tecnologías
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Frontend:** Angular 16+, PrimeNG, SweetAlert2
+- **Backend:** Firebase Firestore, Firebase Auth, EmailJS
 
-## Code scaffolding
+## Requisitos previos
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Tener instalado **Node.js** (versión 16 o superior).  
+  Puedes descargarlo desde: [https://nodejs.org/es/](https://nodejs.org/es/)
+- Tener instalado **Angular CLI**  
+  Instálalo ejecutando en la terminal:
+  ```bash
+  npm install -g @angular/cli
+  ```
+- Tener una cuenta y proyecto en **Firebase** (con Firestore y Auth habilitados)
+- Tener una cuenta en **EmailJS** (para notificaciones por correo)
 
-```bash
-ng generate component component-name
-```
+## Instalación
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. **Clona el repositorio:**
+   ```bash
+   git clone https://github.com/tu-usuario/agenda-medica.git
+   cd agenda-medica
+   ```
 
-```bash
-ng generate --help
-```
+2. **Instala las dependencias:**
+   ```bash
+   npm install
+   ```
 
-## Building
+3. **Configura Firebase:**
+   - Copia tu configuración de Firebase en los archivos `src/environments/environment.development.ts` y `src/environments/environment.ts`.
+   - Crea las colecciones necesarias en Firestore: `users`, `appointments`, `treatments`, `freeDays`, `specialties`, `appointmentType`, etc.
 
-To build the project run:
+4. **Configura EmailJS:**
+   - Agrega tus claves de EmailJS en los archivos de entorno bajo la propiedad `emailjs`.
 
-```bash
-ng build
-```
+## Cómo ejecutar el proyecto
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+1. **Inicia el servidor de desarrollo:**
+   ```bash
+   npm run start
+   ```
+   o también puedes usar:
+   ```bash
+   ng serve
+   ```
 
-## Running unit tests
+2. **Abre tu navegador y visita:**  
+   [http://localhost:4200](http://localhost:4200)
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Estructura del proyecto
 
-```bash
-ng test
-```
+- `src/app/auth` - Autenticación y registro
+- `src/app/user` - Gestión de usuarios (pacientes, doctores)
+- `src/app/appointment` - Funcionalidades de citas
+- `src/app/treatments` - Gestión de tratamientos
+- `src/app/medical-record` - Expedientes médicos
+- `src/app/admin-panel` - Panel de administración (configuración de días)
+- `src/app/shared/services` - Servicios reutilizables de Angular
 
-## Running end-to-end tests
+## Colecciones de Firestore
 
-For end-to-end (e2e) testing, run:
+- `users` - Perfiles de usuarios (pacientes, doctores, admins)
+- `appointments` - Documentos de citas
+- `treatments` - Registros de tratamientos
+- `freeDays` - Días bloqueados (admin)
+- `specialties` - Especialidades médicas
+- `appointmentType` - Tipos de consulta
 
-```bash
-ng e2e
-```
+## Scripts útiles
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- `npm run start` o `ng serve` - Inicia el servidor de desarrollo
+- `ng build` - Compila el proyecto para producción
+- `ng test` - Ejecuta los tests unitarios
 
-## Additional Resources
+## Contribuciones
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+¡Se aceptan pull requests! Para cambios importantes, por favor abre primero un issue para discutir lo que te gustaría modificar.
+
+## Licencia
+
+MIT
+
+---
+
+**Nota:**  
+- Recuerda actualizar las variables de entorno y las reglas de Firebase para producción.
+- Para cualquier duda o problema, contacta al responsable del proyecto o abre un issue en GitHub.
