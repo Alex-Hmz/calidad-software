@@ -35,7 +35,7 @@
                       <p-tag [value]="cita.estado" severity="info"></p-tag>
                       @if(authService.getCurrentRole() === 'doctor' || authService.getCurrentRole() === 'admin'){
                         <div>
-                          <p-button icon="pi pi-pencil" aria-label="Confirm" (onClick)="createTreatment(cita.id, cita.userId)" [disabled]="cita.estado === 'Confirmada'"/>
+                          <p-button icon="pi pi-pencil" aria-label="Confirm" (onClick)="createTreatment(cita.id, cita.userId)" [disabled]="cita.estado === 'Realizada'"/>
                         </div>
                         <div>
                           <button pButton type="button" icon="pi pi-user" class="p-button-info" [routerLink]="['/medical-record', cita.userId]" label="Ver expediente"></button>

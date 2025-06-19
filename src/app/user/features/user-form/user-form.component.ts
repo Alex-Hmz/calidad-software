@@ -6,6 +6,7 @@ import { CreateDoctorProfile, DoctorProfile, PatientProfile } from '../../../sha
 import { AuthService } from '../../../shared/services/auth/auth.service';
 import { UserRoleEnum } from '../../../shared/models/enums';
 import Swal from 'sweetalert2';
+import { SpecialtyService } from '../../../shared/services/specialty-data-access/specialty.service';
 
 @Component({
   selector: 'app-user-form',
@@ -28,7 +29,9 @@ export class UserFormComponent {
     private fb: FormBuilder,
     private router: Router,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    public specialtyService: SpecialtyService
+    
   ) {
     this.form = this.fb.group({
         name: ['', Validators.required],
@@ -61,6 +64,8 @@ export class UserFormComponent {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') ?? null;
+    console.log('ID from route:', this.id);
+    
     this.editionMode = !!this.id;
     this.setAvailableTimes();
 
@@ -126,7 +131,16 @@ export class UserFormComponent {
     }
 
     try {
-      const user = await this.authService.register(email, password, UserRoleEnum.doctor);
+
+      let user: any;
+      if(!this.editionMode){
+        user = await this.authService.register(email, password, UserRoleEnum.doctor);
+      }else{
+        user = await this.authService.getUserProfile(this.id!); 
+        console.log('User from auth service:', user);
+        
+      }
+      
 
       if (user) {
         const doctorProfile: CreateDoctorProfile = {
@@ -146,7 +160,7 @@ export class UserFormComponent {
           isFirstLogin: true
         };
 
-        const success = await this.authService.createUserProfile(user.uid, doctorProfile);
+        const success = await this.authService.createUserProfile(this.id!, doctorProfile);
         if (success) {
           Swal.fire({
             title: "Registro exitoso",

@@ -19,8 +19,6 @@ export class NotificationService {
   }
 
   send(appointmentEmailParams:AppointmentEmailParams) {
-
-    
     return this.sendEmail({
       to_email: appointmentEmailParams.to_email,
       to_name: appointmentEmailParams.to_name,

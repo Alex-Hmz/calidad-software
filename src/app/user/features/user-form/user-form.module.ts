@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
 
 
 
@@ -24,7 +25,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputTextModule,
     ButtonModule,
     ProgressSpinnerModule,
-    InputNumberModule
+    InputNumberModule,
+    SelectModule
+
   ],
   exports: [UserFormComponent],
 })
